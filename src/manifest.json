@@ -16,9 +16,14 @@
   },
   "browser_action": {
     "default_icon": {
-      "19": "icons/icon-16.png",
-      "38": "icons/icon-32.png"
+      "19": "icons/icon-19.png",
+      "38": "icons/icon-38.png"
     },
     "default_title": "Send to MeTube"
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "{46933002-05ea-42d1-a22e-a28c8cd344ab}"
+    }
   }
 }
