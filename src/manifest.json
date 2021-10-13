@@ -1,0 +1,24 @@
+{
+  "manifest_version": 2,
+  "name": "MeTube Downloader",
+  "version": "1.0",
+  "description": "Queue download to your MeTube instance",
+  "permissions": ["activeTab", "menus", "storage"],
+  "icons": {
+    "48": "icons/icon-48.png"
+  },
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "options_ui": {
+    "page": "options.html",
+    "browser_style": true
+  },
+  "browser_action": {
+    "default_icon": {
+      "19": "icons/icon-16.png",
+      "38": "icons/icon-32.png"
+    },
+    "default_title": "Send to MeTube"
+  }
+}
