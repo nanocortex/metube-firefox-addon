@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "MeTube Downloader",
-  "version": "1.0",
+  "version": "1.1",
   "description": "Queue download to your MeTube instance",
   "permissions": ["activeTab", "menus", "storage"],
   "icons": {
@@ -23,7 +23,7 @@
   },
   "browser_specific_settings": {
     "gecko": {
-      "id": "{46933002-05ea-42d1-a22e-a28c8cd344ab}"
+      "id": "{6c6751df-7510-4e27-9637-9ae354c86f8c}"
     }
   }
 }
