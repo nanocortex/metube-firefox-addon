@@ -6,11 +6,19 @@
   </head>
 
   <body>
-
     <form>
-      <label>MeTube instance url</label><br>
-      <input type="text" id="url" placeholder="https://meetube.example.com">
-      <button type="submit">Save</button>
+      <fieldset>
+        <legend>Settings:</legend>
+        <div>
+          <label for="url">MeTube instance url</label><br>
+          <input type="text" id="url" placeholder="https://meetube.example.com">
+        </div>
+        <div>
+          <input type="checkbox" id="openInNewTab" />
+          <label for="openInNewTab">Open MeTube instance in new tab after adding to queue</label>
+        </div>
+        <button type="submit">Save</button>
+      </fieldset>
     </form>
 
     <script src="options.js"></script>

@@ -14,6 +14,11 @@ async function getMeTubeUrl() {
   return item.url;
 }
 
+async function shouldOpenInNewTab() {
+  let item = await browser.storage.sync.get("openInNewTab");
+  return item.openInNewTab;
+}
+
 async function sendToMeTube(itemUrl) {
   itemUrl = itemUrl || await getCurrentUrl();
   let meTubeUrl = await getMeTubeUrl();
@@ -22,7 +27,7 @@ async function sendToMeTube(itemUrl) {
   xhr.open("POST", url.toString());
   xhr.send(JSON.stringify({ "url" : itemUrl, "quality" : "best" }));
   xhr.onload = async function() {
-    if (xhr.status == 200) { 
+    if (xhr.status == 200 && await shouldOpenInNewTab()) { 
       await browser.tabs.create({ 'active': true, 'url': meTubeUrl });
     } else {
       console.error("Send to MeTube failed. MeTube url: " + url.toString() + ", itemUrl: " + itemUrl);
