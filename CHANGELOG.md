@@ -4,9 +4,9 @@
 
 # 1.2
 
-- Add option in addon preferences to open MeTube instance in new tab
+- Added option in addon preferences to open MeTube instance in new tab
 
 # 1.3
 
-- Add popup when clicking toolbar button for better verbosity
-- Allow selecting quality and format options
+- Added popup when clicking toolbar button for better verbosity
+- Added option to select quality and format

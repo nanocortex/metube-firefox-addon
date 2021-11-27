@@ -8,7 +8,7 @@ function showError(errorMessage) {
     document.querySelector("#popup-content").classList.add("hidden");
     document.querySelector("#success-content").classList.add("hidden");
     document.querySelector("#error-content").classList.remove("hidden");
-    document.querySelector("#error-content p").innerHTML = errorMessage;
+    document.querySelector("#error-content p").textContent = errorMessage;
     console.error(`Failed to execute MeTube script: ${errorMessage}`);
 }
 
