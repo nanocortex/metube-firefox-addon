@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="popup.css"/>
+</head>
+<body>
+<div id="popup-content">
+    <div id="options-row">
+        <div id="quality-container">
+            <label for="quality">Quality</label>
+            <select name="quality" id="quality">
+                <option value="best">Best</option>
+                <option value="1440">1440p</option>
+                <option value="1080">1080p</option>
+                <option value="720">720p</option>
+                <option value="480">480p</option>
+                <option value="audio">Audio only</option>
+            </select>
+        </div>
+        <div id="format-container">
+            <label for="format">Format</label>
+            <select name="format" id="format">
+                <option value="any">Any</option>
+                <option value="mp4">MP4</option>
+                <option value="mp3">MP3</option>
+            </select>
+        </div>
+    </div>
+    <div id="buttons-row">
+        <button id="sendToMeTube" class="send-to-metube">Send to MeTube</button>
+    </div>
+</div>
+<div id="error-content" class="hidden error-msg">
+    <p>Error occurred. Check logs for more information.</p>
+</div>
+<div id="success-content" class="hidden success-msg">
+    <p>Successfully sent to MeTube</p>
+</div>
+<script src="popup.js"></script>
+
+</body>
+</html>

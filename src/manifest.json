@@ -1,9 +1,10 @@
 {
   "manifest_version": 2,
   "name": "MeTube Downloader",
-  "version": "1.2",
+  "version": "1.3",
   "description": "Queue download to your MeTube instance",
   "permissions": ["activeTab", "menus", "storage"],
+  "homepage_url": "https://github.com/nanocortex/metube-firefox-addon",
   "icons": {
     "48": "icons/icon-48.png"
   },
@@ -19,7 +20,8 @@
       "19": "icons/icon-19.png",
       "38": "icons/icon-38.png"
     },
-    "default_title": "Send to MeTube"
+    "default_title": "Send to MeTube",
+    "default_popup": "popup/popup.html"
   },
   "browser_specific_settings": {
     "gecko": {

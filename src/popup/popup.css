@@ -1,0 +1,85 @@
+html, body {
+    font-family: 'sans-serif';
+    background: #3a3a3a;
+    width: 320px;
+    color: #eee;
+}
+
+.hidden {
+    display: none;
+}
+
+#popup-content,
+#error-content,
+#success-content {
+    text-align: center;
+}
+
+#popup-content div#options-row {
+    display: flex;
+    justify-content: space-between;
+}
+
+#popup-content div#options-row #quality-container {
+    margin-right: .5rem;
+}
+
+label {
+    color: #ccc;
+    font-size: 12px;
+}
+
+select {
+    width: 100%;
+    border: 1px solid #eee;
+    border-radius: 0.25em;
+    padding: 4px 8px;
+    background-color: #fff;
+    background-image: linear-gradient(to top, #f9f9f9, #fff 33%);
+    margin-top: .25rem;
+}
+
+#buttons-row {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 1.5rem;
+}
+
+#buttons-row button {
+    background: #ff4d43;
+    border: 1px solid #ff4d43;
+    border-radius: 6px;
+    box-shadow: rgba(0, 0, 0, 0.1) 1px 2px 4px;
+    box-sizing: border-box;
+    color: #FFFFFF;
+    cursor: pointer;
+    display: inline-block;
+    font-family: nunito, roboto, proxima-nova, "proxima nova", sans-serif;
+    font-size: 16px;
+    font-weight: 800;
+    line-height: 16px;
+    min-height: 40px;
+    outline: 0;
+    padding: 12px 14px;
+    text-align: center;
+    text-rendering: geometricprecision;
+    text-transform: none;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    vertical-align: middle;
+    transition: all .1s ease;
+
+}
+
+#buttons-row button:hover,
+#buttons-row button:active {
+    background-color: initial;
+    background-position: 0 0;
+    color: #FF4742;
+    transition: all .1s ease;
+}
+
+#buttons-row button:active {
+    opacity: .5;
+}
