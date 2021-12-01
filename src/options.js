@@ -3,6 +3,7 @@ function saveOptions(e) {
   browser.storage.sync.set({
     url: document.querySelector("#url").value,
     openInNewTab: document.querySelector("#openInNewTab").checked,
+    showContextMenu: document.querySelector("#showContextMenu").checked,
   });
 }
 
@@ -19,6 +20,11 @@ function restoreOptions() {
   let getOpenInNewTab = browser.storage.sync.get("openInNewTab");
   getOpenInNewTab.then(function(result) {
     document.querySelector("#openInNewTab").checked = result.openInNewTab || false;
+  }, onError);
+  
+  let showContextMenu = browser.storage.sync.get("showContextMenu");
+  showContextMenu.then(function(result) {
+    document.querySelector("#showContextMenu").checked = result.showContextMenu || false;
   }, onError);
 }
 
