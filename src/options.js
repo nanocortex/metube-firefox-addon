@@ -1,8 +1,16 @@
 function saveOptions(e) {
   e.preventDefault();
+  
+  let showContextMenu = document.querySelector("#showContextMenu").checked;
+  
   browser.storage.sync.set({
     url: document.querySelector("#url").value,
     openInNewTab: document.querySelector("#openInNewTab").checked,
+    showContextMenu,
+  });
+  
+  browser.menus.update("send-to-metube", {
+    visible: showContextMenu,
   });
 }
 
@@ -19,6 +27,11 @@ function restoreOptions() {
   let getOpenInNewTab = browser.storage.sync.get("openInNewTab");
   getOpenInNewTab.then(function(result) {
     document.querySelector("#openInNewTab").checked = result.openInNewTab || false;
+  }, onError);
+  
+  let showContextMenu = browser.storage.sync.get("showContextMenu");
+  showContextMenu.then(function(result) {
+    document.querySelector("#showContextMenu").checked = result.showContextMenu || false;
   }, onError);
 }
 

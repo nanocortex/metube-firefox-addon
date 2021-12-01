@@ -1,8 +1,23 @@
+function onMenuCreated() {
+    if (browser.runtime.lastError) {
+        console.log("error creating item:" + browser.runtime.lastError);
+    }
+    
+    syncContextMenu();
+}
+
+async function syncContextMenu() {
+    let showContextMenu = await shouldShowContextMenu();
+    browser.menus.update("send-to-metube", {
+        visible: showContextMenu,
+    });
+}
+
 browser.menus.create({
     id: "send-to-metube",
     title: "Send to MeTube",
     contexts: ["link"]
-});
+}, onMenuCreated);
 
 async function showError(errorMessage) {
     console.error(`Error occured: ${errorMessage}`)
@@ -27,6 +42,11 @@ async function getMeTubeUrl() {
 async function shouldOpenInNewTab() {
     let item = await browser.storage.sync.get("openInNewTab");
     return item.openInNewTab;
+}
+
+async function shouldShowContextMenu() {
+    let item = await browser.storage.sync.get("showContextMenu");
+    return item.showContextMenu || true;
 }
 
 async function sendToMeTube(itemUrl, quality, format) {
