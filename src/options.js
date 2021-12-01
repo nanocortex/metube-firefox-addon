@@ -1,9 +1,16 @@
 function saveOptions(e) {
   e.preventDefault();
+  
+  let showContextMenu = document.querySelector("#showContextMenu").checked;
+  
   browser.storage.sync.set({
     url: document.querySelector("#url").value,
     openInNewTab: document.querySelector("#openInNewTab").checked,
-    showContextMenu: document.querySelector("#showContextMenu").checked,
+    showContextMenu,
+  });
+  
+  browser.menus.update("send-to-metube", {
+    visible: showContextMenu,
   });
 }
 
