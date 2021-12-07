@@ -46,7 +46,7 @@ async function shouldOpenInNewTab() {
 
 async function shouldShowContextMenu() {
     let item = await browser.storage.sync.get("showContextMenu");
-    return item.showContextMenu || true;
+    return 'showContextMenu' in item ? item.showContextMenu : true;
 }
 
 async function sendToMeTube(itemUrl, quality, format) {
