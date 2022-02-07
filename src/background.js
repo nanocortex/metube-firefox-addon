@@ -24,9 +24,9 @@ async function showError(errorMessage) {
     await browser.runtime.sendMessage({command: 'errorOccurred', errorMessage: errorMessage});
 }
 
-async function showSuccess() {
-    console.log(`Successfuly sent to MeTube`)
-    await browser.runtime.sendMessage({command: 'success'});
+function showSuccess() {
+    console.log(`Successfuly sent to MeTube`);
+    browser.runtime.sendMessage({command: 'success'}).then(function(){}, function(e) {});
 }
 
 async function getCurrentUrl() {
@@ -49,6 +49,17 @@ async function shouldShowContextMenu() {
     return 'showContextMenu' in item ? item.showContextMenu : true;
 }
 
+async function getDefaultQuality() {
+    let item = await browser.storage.sync.get("defaultQuality");
+    return item.defaultQuality ?? 'best';
+}
+
+async function getDefaultFormat() {
+    let item = await browser.storage.sync.get("defaultFormat");
+    return item.defaultFormat ?? 'any';
+}
+
+
 async function sendToMeTube(itemUrl, quality, format) {
     itemUrl = itemUrl || await getCurrentUrl();
     console.log(`Send to MeTube. Url: ${itemUrl}, quality: ${quality}, format: ${format}`);
@@ -62,8 +73,8 @@ async function sendToMeTube(itemUrl, quality, format) {
     xhr.open("POST", url.toString());
     xhr.send(JSON.stringify({"url": itemUrl, "quality": quality, "format": format}));
     xhr.onload = async function () {
-        if (xhr.status == 200) {
-            await showSuccess();
+        if (xhr.status === 200) {
+            showSuccess();
             if (await shouldOpenInNewTab()) {
                 await browser.tabs.create({'active': true, 'url': meTubeUrl});
             }
@@ -80,7 +91,9 @@ async function sendToMeTube(itemUrl, quality, format) {
 browser.menus.onClicked.addListener(async function (info, tab) {
     if (info.menuItemId == "send-to-metube") {
         if (info.linkUrl) {
-            await sendToMeTube(info.linkUrl, tab);
+            let quality = await getDefaultQuality();
+            let format = await getDefaultFormat();
+            await sendToMeTube(info.linkUrl, quality, format);
         }
     }
 });
