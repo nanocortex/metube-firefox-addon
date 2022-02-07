@@ -1,7 +1,8 @@
 document.getElementById("sendToMeTube").addEventListener("click", async function () {
     let quality = document.getElementById('quality').value;
     let format = document.getElementById('format').value;
-    await browser.runtime.sendMessage({command: 'sendToMeTube', quality: quality, format: format});
+    let url = document.getElementById('urlInput').value;
+    await browser.runtime.sendMessage({command: 'sendToMeTube', quality: quality, format: format, url: url});
 });
 
 function showError(errorMessage) {
@@ -27,4 +28,30 @@ browser.runtime.onMessage.addListener(async (message) => {
             window.close();
         }, 1500);
     }
+});
+
+
+async function getCurrentUrl() {
+    let tabs = await browser.tabs.query({currentWindow: true, active: true});
+    return tabs[0].url;
+}
+
+async function getDefaultFormat() {
+    let item = await browser.storage.sync.get("defaultFormat");
+    return item.defaultFormat;
+}
+
+async function getDefaultQuality() {
+    let item = await browser.storage.sync.get("defaultQuality");
+    return item.defaultQuality;
+}
+
+addEventListener('DOMContentLoaded', async (event) => {
+    let url = await getCurrentUrl();
+    let defaultFormat = await getDefaultFormat();
+    let defaultQuality = await getDefaultQuality();
+    if(url && url.indexOf("://") === -1) url = "";
+    document.getElementById('urlInput').value = url || "";
+    document.getElementById('format').value = defaultFormat || "any";
+    document.getElementById('quality').value = defaultQuality || "best";
 });

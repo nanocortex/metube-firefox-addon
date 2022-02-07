@@ -5,6 +5,8 @@ function saveOptions(e) {
   
   browser.storage.sync.set({
     url: document.querySelector("#url").value,
+    defaultQuality: document.querySelector("#defaultQuality").value,
+    defaultFormat: document.querySelector("#defaultFormat").value,
     openInNewTab: document.querySelector("#openInNewTab").checked,
     showContextMenu,
   });
@@ -22,6 +24,16 @@ function restoreOptions() {
   let getUrl = browser.storage.sync.get("url");
   getUrl.then(function(result) {
     document.querySelector("#url").value = result.url || "";
+  }, onError);
+
+  let getDefaultQuality = browser.storage.sync.get("defaultQuality");
+  getDefaultQuality.then(function(result) {
+    document.querySelector("#defaultQuality").value = result.defaultQuality || "best";
+  }, onError);
+
+  let getDefaultFormat = browser.storage.sync.get("defaultFormat");
+  getDefaultFormat.then(function(result) {
+    document.querySelector("#defaultFormat").value = result.defaultFormat || "any";
   }, onError);
 
   let getOpenInNewTab = browser.storage.sync.get("openInNewTab");

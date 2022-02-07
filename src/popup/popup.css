@@ -42,7 +42,7 @@ select {
 #buttons-row {
     display: flex;
     justify-content: flex-end;
-    margin-top: 1.5rem;
+    margin-top: .5rem;
 }
 
 #buttons-row button {
@@ -82,4 +82,15 @@ select {
 
 #buttons-row button:active {
     opacity: .5;
+}
+
+#urlInput{  
+    width: 100%;
+    padding: 4px 8px;
+    font-size: 12px;
+    box-sizing: border-box;
+    border: 1px solid #eee;
+    border-radius: .25em;
+    background-color: #fff; 
+    margin-top: 1rem;
 }

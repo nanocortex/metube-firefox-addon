@@ -53,7 +53,6 @@ async function sendToMeTube(itemUrl, quality, format) {
     itemUrl = itemUrl || await getCurrentUrl();
     console.log(`Send to MeTube. Url: ${itemUrl}, quality: ${quality}, format: ${format}`);
     let meTubeUrl = await getMeTubeUrl();
-
     if (!meTubeUrl) {
         await showError('MeTube instance url not configured. Go to about:addons to configure.');
     }
