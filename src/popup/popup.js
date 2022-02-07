@@ -36,11 +36,6 @@ async function getCurrentUrl() {
     return tabs[0].url;
 }
 
-async function getReplaceWithYoutube() {
-    let item = await browser.storage.sync.get("replaceWithYoutube");
-    return item.replaceWithYoutube;
-}
-
 async function getDefaultFormat() {
     let item = await browser.storage.sync.get("defaultFormat");
     return item.defaultFormat;
@@ -53,20 +48,9 @@ async function getDefaultQuality() {
 
 addEventListener('DOMContentLoaded', async (event) => {
     let url = await getCurrentUrl();
-    let replaceWithYoutube = await getReplaceWithYoutube();
     let defaultFormat = await getDefaultFormat();
     let defaultQuality = await getDefaultQuality();
-    if(url.indexOf("://") === -1) url = "";
-    if(replaceWithYoutube && url){
-        replaceWithYoutube = replaceWithYoutube.split(',');
-        for (let i = 0; i < replaceWithYoutube.length; i++) {
-            let item = replaceWithYoutube[i].trim();
-            if(item.indexOf("youtube.com") === -1 && url.indexOf(item) !== -1){
-                url = url.replace(item, "www.youtube.com");
-                break;
-            }
-        } 
-    }
+    if(url && url.indexOf("://") === -1) url = "";
     document.getElementById('urlInput').value = url || "";
     document.getElementById('format').value = defaultFormat || "any";
     document.getElementById('quality').value = defaultQuality || "best";

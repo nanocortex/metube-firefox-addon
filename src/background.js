@@ -49,27 +49,10 @@ async function shouldShowContextMenu() {
     return 'showContextMenu' in item ? item.showContextMenu : true;
 }
 
-
-async function getReplaceWithYoutube() {
-    let item = await browser.storage.sync.get("replaceWithYoutube");
-    return item.replaceWithYoutube;
-}
-
 async function sendToMeTube(itemUrl, quality, format) {
     itemUrl = itemUrl || await getCurrentUrl();
     console.log(`Send to MeTube. Url: ${itemUrl}, quality: ${quality}, format: ${format}`);
     let meTubeUrl = await getMeTubeUrl();
-    let replaceWithYoutube = await getReplaceWithYoutube();
-    if(replaceWithYoutube && itemUrl){
-        replaceWithYoutube = replaceWithYoutube.split(',');
-        for (let i = 0; i < replaceWithYoutube.length; i++) {
-            let item = replaceWithYoutube[i].trim();
-            if(item.indexOf("youtube.com") === -1 && itemUrl.indexOf(item) !== -1){
-                itemUrl = itemUrl.replace(item, "www.youtube.com");
-                break;
-            }
-        } 
-    }
     if (!meTubeUrl) {
         await showError('MeTube instance url not configured. Go to about:addons to configure.');
     }
