@@ -11,4 +11,4 @@ Addon for queueing videos to [MeTube](https://github.com/alexta69/metube) instan
 
 ## Usage
 
-Before using you should configure MeTube instanace url in addon preferences.
+Before use you should configure MeTube instance url in addon preferences.
