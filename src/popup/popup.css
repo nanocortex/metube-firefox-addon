@@ -1,8 +1,9 @@
-html, body {
-    font-family: 'sans-serif';
-    background: #3a3a3a;
-    width: 320px;
-    color: #eee;
+html,
+body {
+    font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+    width: 300px;
+    color: #CFD8DC;
+    background: #263238;
 }
 
 .hidden {
@@ -25,72 +26,79 @@ html, body {
 }
 
 label {
-    color: #ccc;
+    color: #dedede;
     font-size: 12px;
+    margin-bottom: .4rem !important;
+    display: inline-block;
+    text-align: left !important;
+    font-weight: 600;
 }
 
 select {
     width: 100%;
-    border: 1px solid #eee;
+    border: none;
     border-radius: 0.25em;
-    padding: 4px 8px;
-    background-color: #fff;
-    background-image: linear-gradient(to top, #f9f9f9, #fff 33%);
-    margin-top: .25rem;
+    padding: 0.4rem 0.75rem;
+    border: solid 1px #455A64;
+    background-color: #455A64;
+    color: #CFD8DC;
+
 }
 
 #buttons-row {
     display: flex;
     justify-content: flex-end;
-    margin-top: .5rem;
+    margin-top: 1rem;
 }
 
 #buttons-row button {
-    background: #ff4d43;
-    border: 1px solid #ff4d43;
+    background-color: #0D47A1;
+    border: 1px solid #0D47A1;
     border-radius: 6px;
     box-shadow: rgba(0, 0, 0, 0.1) 1px 2px 4px;
     box-sizing: border-box;
-    color: #FFFFFF;
+    color: #fafafa;
     cursor: pointer;
     display: inline-block;
-    font-family: nunito, roboto, proxima-nova, "proxima nova", sans-serif;
-    font-size: 16px;
-    font-weight: 800;
+    font-size: .9em;
+    font-weight: 700;
     line-height: 16px;
     min-height: 40px;
     outline: 0;
     padding: 12px 14px;
     text-align: center;
-    text-rendering: geometricprecision;
-    text-transform: none;
-    user-select: none;
-    -webkit-user-select: none;
     touch-action: manipulation;
     vertical-align: middle;
     transition: all .1s ease;
-
+    width: 100%;
+    margin-bottom: .25rem;
 }
 
 #buttons-row button:hover,
 #buttons-row button:active {
-    background-color: initial;
-    background-position: 0 0;
-    color: #FF4742;
     transition: all .1s ease;
+    opacity: .8;
 }
 
 #buttons-row button:active {
     opacity: .5;
 }
 
-#urlInput{  
+#url-input-container {
+    margin-top: 1rem;
+}
+
+#url-input-container #urlInput {
     width: 100%;
-    padding: 4px 8px;
     font-size: 12px;
     box-sizing: border-box;
-    border: 1px solid #eee;
+    border: 1px solid #455A64;
+    background-color: #455A64;
     border-radius: .25em;
-    background-color: #fff; 
-    margin-top: 1rem;
+    padding: 0.4rem 0.75rem;
+    color: #CFD8DC;
+}
+
+input::placeholder {
+    color: #CFD8DC;
 }
