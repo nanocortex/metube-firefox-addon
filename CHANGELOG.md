@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.3.4 - 2023-03-19
+
+- Added missing format types: WAV, Opus, M4A, Thumbnail
+- Improved UI to be more easy on the eyes
+
+
 ## 1.3.3 - 2022-02-07
 
 - Added default quality and format option, thanks to [@aYUSHc137](https://github.com/ayushc137)
