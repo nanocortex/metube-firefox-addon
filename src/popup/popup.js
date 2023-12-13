@@ -1,8 +1,9 @@
 document.getElementById("sendToMeTube").addEventListener("click", async function () {
     let quality = document.getElementById('quality').value;
     let format = document.getElementById('format').value;
+    let autoStart = document.getElementById('autoStart').value;
     let url = document.getElementById('urlInput').value;
-    await browser.runtime.sendMessage({command: 'sendToMeTube', quality: quality, format: format, url: url});
+    await browser.runtime.sendMessage({command: 'sendToMeTube', quality: quality, format: format, url: url, autoStart: autoStart});
 });
 
 function showError(errorMessage) {
@@ -46,12 +47,19 @@ async function getDefaultQuality() {
     return item.defaultQuality;
 }
 
+async function getDefaultAutoStart() {
+    let item = await browser.storage.sync.get("defaultAutoStart");
+    return item.defaultAutoStart;
+}
+
 addEventListener('DOMContentLoaded', async (event) => {
     let url = await getCurrentUrl();
     let defaultFormat = await getDefaultFormat();
     let defaultQuality = await getDefaultQuality();
+    let defaultAutoStart = await getDefaultAutoStart();
     if(url && url.indexOf("://") === -1) url = "";
     document.getElementById('urlInput').value = url || "";
     document.getElementById('format').value = defaultFormat || "any";
     document.getElementById('quality').value = defaultQuality || "best";
+    document.getElementById('autoStart').value = defaultAutoStart || "false";
 });

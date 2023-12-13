@@ -59,10 +59,14 @@ async function getDefaultFormat() {
     return item.defaultFormat ?? 'any';
 }
 
+async function getDefaultAutoStart() {
+    let item = await browser.storage.sync.get("defaultAutoStart");
+    return item.defaultAutoStart ?? 'false';
+}
 
-async function sendToMeTube(itemUrl, quality, format) {
+async function sendToMeTube(itemUrl, quality, format, autoStart) {
     itemUrl = itemUrl || await getCurrentUrl();
-    console.log(`Send to MeTube. Url: ${itemUrl}, quality: ${quality}, format: ${format}`);
+    console.log(`Send to MeTube. Url: ${itemUrl}, quality: ${quality}, format: ${format}, autoStart:${autoStart}`);
     let meTubeUrl = await getMeTubeUrl();
     if (!meTubeUrl) {
         await showError('MeTube instance url not configured. Go to about:addons to configure.');
@@ -71,7 +75,10 @@ async function sendToMeTube(itemUrl, quality, format) {
     let url = new URL("add", meTubeUrl);
     let xhr = new XMLHttpRequest();
     xhr.open("POST", url.toString());
-    xhr.send(JSON.stringify({"url": itemUrl, "quality": quality, "format": format}));
+
+    let json = JSON.stringify({"url": itemUrl, "quality": quality, "format": format,"auto_start": (autoStart === 'true')});
+    console.log(`JSON sent: ${json}`);
+    xhr.send(json);
     xhr.onload = async function () {
         if (xhr.status === 200) {
             showSuccess();
@@ -93,7 +100,8 @@ browser.menus.onClicked.addListener(async function (info, tab) {
         if (info.linkUrl) {
             let quality = await getDefaultQuality();
             let format = await getDefaultFormat();
-            await sendToMeTube(info.linkUrl, quality, format);
+            let autoStart = await getDefaultAutoStart();
+            await sendToMeTube(info.linkUrl, quality, format, autoStart);
         }
     }
 });
@@ -103,7 +111,8 @@ browser.runtime.onMessage.addListener(async (message) => {
         let url = message.url || await getCurrentUrl();
         let quality = message.quality || 'best';
         let format = message.format || 'any';
-        await sendToMeTube(url, quality, format);
+        let autoStart = message.autoStart || 'false';
+        await sendToMeTube(url, quality, format, autoStart);
     }
 });
 

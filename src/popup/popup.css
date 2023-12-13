@@ -1,7 +1,7 @@
 html,
 body {
     font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
-    width: 300px;
+    width: 350px;
     color: #CFD8DC;
     background: #263238;
 }
@@ -21,7 +21,8 @@ body {
     justify-content: space-between;
 }
 
-#popup-content div#options-row #quality-container {
+#popup-content div#options-row #quality-container,
+#popup-content div#options-row #format-container {
     margin-right: .5rem;
 }
 
