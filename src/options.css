@@ -1,0 +1,39 @@
+.hidden {
+    display: none;
+}
+
+.section {
+    border: 1px solid #ccc;
+    padding: 0 1rem;
+    margin-bottom: 1rem;
+}
+
+.inline-form-fields {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.5rem;
+}
+
+.inline-form-fields input {
+    display: block;
+}
+
+.list-unstyled {
+    list-style: none;
+    padding: 0;
+}
+
+.header-pair {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.header-pair code {
+    border: 1px solid #ccc;
+    background-color: #eee;
+    padding: 0.25rem;
+}
+
+.text-danger {
+    color: tomato;
+}

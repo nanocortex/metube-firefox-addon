@@ -59,6 +59,15 @@ async function getDefaultFormat() {
     return item.defaultFormat ?? 'any';
 }
 
+async function shouldSendCustomHeaders() {
+    let item = await browser.storage.sync.get("sendCustomHeaders");
+    return item.sendCustomHeaders ?? false;
+}
+
+async function customHeaders() {
+    let item = await browser.storage.sync.get("customHeaders");
+    return item.customHeaders ?? [];
+}
 
 async function sendToMeTube(itemUrl, quality, format) {
     itemUrl = itemUrl || await getCurrentUrl();
@@ -71,6 +80,15 @@ async function sendToMeTube(itemUrl, quality, format) {
     let url = new URL("add", meTubeUrl);
     let xhr = new XMLHttpRequest();
     xhr.open("POST", url.toString());
+
+    const useCustomHeaders = await shouldSendCustomHeaders();
+    if (useCustomHeaders) {
+        const headers = await customHeaders();
+        headers.forEach(header => {
+            xhr.setRequestHeader(header.name, header.value);
+        });
+    }
+    
     xhr.send(JSON.stringify({"url": itemUrl, "quality": quality, "format": format}));
     xhr.onload = async function () {
         if (xhr.status === 200) {
