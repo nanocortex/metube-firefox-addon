@@ -1,4 +1,6 @@
 document.getElementById("sendToMeTube").addEventListener("click", async function () {
+    showLoadingState();
+
     let quality = document.getElementById('quality').value;
     let format = document.getElementById('format').value;
     let url = document.getElementById('urlInput').value;
@@ -19,7 +21,17 @@ function showSuccess() {
     document.querySelector("#success-content").classList.remove("hidden");
 }
 
+function showLoadingState() {
+    document.getElementById('loadingSpinner').classList.remove('hidden');
+}
+
+function hideLoadingState() {
+    document.getElementById('loadingSpinner').classList.add('hidden');
+}
+
 browser.runtime.onMessage.addListener(async (message) => {
+    hideLoadingState();
+
     if (message.command === "errorOccurred") {
         showError(message.errorMessage);
     } else if (message.command === "success") {
