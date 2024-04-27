@@ -110,9 +110,13 @@ function addCustomHeader(header) {
   listItem.classList.add('header-pair');
   listItem.dataset.name = header.name;
   listItem.dataset.value = header.value;
-  listItem.innerHTML = `
-    <code>${header.name}</code><code>${header.value}</code>
-  `;
+
+  const codeName = document.createElement('code');
+  const codeValue = document.createElement('code');
+  codeName.textContent = header.name;
+  codeValue.textContent = header.value;
+
+  listItem.append(codeName, codeValue);
 
   const removeBtn = document.createElement('button');
   removeBtn.type = 'button';
