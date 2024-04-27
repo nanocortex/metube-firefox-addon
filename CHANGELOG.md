@@ -1,10 +1,13 @@
 # Changelog
 
+## 1.4.0 - 2024-04-27
+- Added loading spinner when queueing, thanks to [@elwynelwyn](https://github.com/elwynelwyn)
+- Added ability to configure custom headers, thanks to [@elwynelwyn](https://github.com/elwynelwyn)
+
 ## 1.3.4 - 2023-03-19
 
 - Added missing format types: WAV, Opus, M4A, Thumbnail
 - Improved UI to be more easy on the eyes
-
 
 ## 1.3.3 - 2022-02-07
 
