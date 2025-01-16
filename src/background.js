@@ -2,7 +2,7 @@ function onMenuCreated() {
     if (browser.runtime.lastError) {
         console.log("error creating item:" + browser.runtime.lastError);
     }
-    
+
     syncContextMenu();
 }
 
@@ -26,7 +26,9 @@ async function showError(errorMessage) {
 
 function showSuccess() {
     console.log(`Successfuly sent to MeTube`);
-    browser.runtime.sendMessage({command: 'success'}).then(function(){}, function(e) {});
+    browser.runtime.sendMessage({command: 'success'}).then(function () {
+    }, function (e) {
+    });
 }
 
 async function getCurrentUrl() {
@@ -59,6 +61,21 @@ async function getDefaultFormat() {
     return item.defaultFormat ?? 'any';
 }
 
+async function getDefaultFolder() {
+    let item = await browser.storage.sync.get("defaultFolder");
+    return item.defaultFolder ?? '';
+}
+
+async function getDefaultCustomNamePrefix() {
+    let item = await browser.storage.sync.get("customNamePrefix");
+    return item.customNamePrefix ?? '';
+}
+
+async function getDefaultAutoStart() {
+    let item = await browser.storage.sync.get("defaultAutoStart");
+    return item.defaultAutoStart ?? false;
+}
+
 async function shouldSendCustomHeaders() {
     let item = await browser.storage.sync.get("sendCustomHeaders");
     return item.sendCustomHeaders ?? false;
@@ -69,9 +86,9 @@ async function customHeaders() {
     return item.customHeaders ?? [];
 }
 
-async function sendToMeTube(itemUrl, quality, format) {
+async function sendToMeTube(itemUrl, quality, format, folder, customNamePrefix, autoStart) {
     itemUrl = itemUrl || await getCurrentUrl();
-    console.log(`Send to MeTube. Url: ${itemUrl}, quality: ${quality}, format: ${format}`);
+    console.log(`Send to MeTube. Url: ${itemUrl}, quality: ${quality}, format: ${format}, folder: ${folder}, customNamePrefix: ${customNamePrefix}, autoStart: ${autoStart}`);
     let meTubeUrl = await getMeTubeUrl();
     if (!meTubeUrl) {
         await showError('MeTube instance url not configured. Go to about:addons to configure.');
@@ -88,8 +105,8 @@ async function sendToMeTube(itemUrl, quality, format) {
             xhr.setRequestHeader(header.name, header.value);
         });
     }
-    
-    xhr.send(JSON.stringify({"url": itemUrl, "quality": quality, "format": format}));
+
+    xhr.send(JSON.stringify({"url": itemUrl, "quality": quality, "format": format, "folder": folder, "custom_name_prefix": customNamePrefix, "auto_start": autoStart}));
     xhr.onload = async function () {
         if (xhr.status === 200) {
             showSuccess();
@@ -111,7 +128,10 @@ browser.menus.onClicked.addListener(async function (info, tab) {
         if (info.linkUrl) {
             let quality = await getDefaultQuality();
             let format = await getDefaultFormat();
-            await sendToMeTube(info.linkUrl, quality, format);
+            let folder = await getDefaultFolder();
+            let customNamePrefix = await getDefaultCustomNamePrefix();
+            let autoStart = await getDefaultAutoStart();
+            await sendToMeTube(info.linkUrl, quality, format, folder, customNamePrefix, autoStart);
         }
     }
 });
@@ -121,8 +141,12 @@ browser.runtime.onMessage.addListener(async (message) => {
         let url = message.url || await getCurrentUrl();
         let quality = message.quality || 'best';
         let format = message.format || 'any';
-        await sendToMeTube(url, quality, format);
+        let folder = message.folder || await getDefaultFolder();
+        let customNamePrefix = message.customNamePrefix || await getDefaultCustomNamePrefix();
+        let autoStart = message.autoStart || await getDefaultAutoStart();
+        await sendToMeTube(url, quality, format, folder, customNamePrefix, autoStart);
     }
 });
+
 
 

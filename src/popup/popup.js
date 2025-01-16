@@ -58,12 +58,16 @@ async function getDefaultQuality() {
     return item.defaultQuality;
 }
 
+async function getDefaultFolder() {
+    let item = await browser.storage.sync.get("defaultFolder");
+    return item.defaultFolder;
+}
+
 addEventListener('DOMContentLoaded', async (event) => {
     let url = await getCurrentUrl();
-    let defaultFormat = await getDefaultFormat();
-    let defaultQuality = await getDefaultQuality();
-    if(url && url.indexOf("://") === -1) url = "";
+    if (url && url.indexOf("://") === -1) url = "";
     document.getElementById('urlInput').value = url || "";
-    document.getElementById('format').value = defaultFormat || "any";
-    document.getElementById('quality').value = defaultQuality || "best";
+    document.getElementById('format').value = await getDefaultFormat() || "any";
+    document.getElementById('quality').value = await getDefaultQuality() || "best";
+    document.getElementById('folder').value = await getDefaultFolder() || "";
 });

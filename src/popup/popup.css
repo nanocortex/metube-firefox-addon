@@ -84,11 +84,12 @@ select {
     opacity: .5;
 }
 
-#url-input-container {
-    margin-top: 1rem;
+.row {
+    margin-top: .75rem;
 }
 
-#url-input-container #urlInput {
+input[type="text"]
+{
     width: 100%;
     font-size: 12px;
     box-sizing: border-box;

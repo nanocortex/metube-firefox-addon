@@ -37,3 +37,16 @@
 .text-danger {
     color: tomato;
 }
+
+.field {
+    margin-bottom: .75rem;
+}
+
+label {
+}
+
+.field input[type="text"],
+.field select {
+    display: block;
+    margin-top: 0.25rem;
+}
