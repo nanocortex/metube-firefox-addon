@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.4.2 - 2025-04-15
+- Fixed download folder not properly passed to MeTube when used from popup
+- Improved options readability
+
 ## 1.4.1 - 2025-01-16
 - Added missing formats and quality types
 - Added options for folder, autoStart and customNamePrefix

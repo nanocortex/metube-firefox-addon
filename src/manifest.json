@@ -1,15 +1,21 @@
 {
   "manifest_version": 2,
   "name": "MeTube Downloader",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "description": "Queue download to your MeTube instance",
-  "permissions": ["activeTab", "menus", "storage"],
+  "permissions": [
+    "activeTab",
+    "menus",
+    "storage"
+  ],
   "homepage_url": "https://github.com/nanocortex/metube-firefox-addon",
   "icons": {
     "48": "icons/icon-48.png"
   },
   "background": {
-    "scripts": ["background.js"]
+    "scripts": [
+      "background.js"
+    ]
   },
   "options_ui": {
     "page": "options.html",
