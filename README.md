@@ -56,3 +56,13 @@ Before use you should configure MeTube instance url in addon preferences`about:a
 - [ ] enhance the user interface for settings (maybe in separate tab)
 - [ ] upgrade to Manifest V3
 - [ ] Github Actions for creating releases (maybe publish to Mozilla too?)
+
+## Contributors
+
+Thanks to the following contributors for their work on this project:
+
+-  [Whale Mo](https://github.com/ncwhale)
+-  [Elwyn](https://github.com/elwynelwyn)
+-  [Ayush Chaurasia](https://github.com/ayushc137)
+
+If you would like to contribute, please create an issue or make a pull request.
