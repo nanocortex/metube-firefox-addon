@@ -11,4 +11,39 @@ Addon for queueing videos to [MeTube](https://github.com/alexta69/metube) instan
 
 ## Usage
 
-Before use you should configure MeTube instance url in addon preferences.
+Before use you should configure MeTube instance url in addon preferences`about:addons`.
+
+## Options
+
+- **MeTube Instance URL**: URL of your MeTube instance (e.g., `https://metube.example.com`).  
+  **Default**: `""` (empty string)
+
+- **Default Quality**: The quality setting for downloads.  
+  **Default**: `best`
+
+- **Default Format**: The format for downloads.  
+  **Default**: `any`
+
+- **Default Folder**: The folder where downloaded files will be saved.  
+  **Default**: `""` (empty string)
+
+- **Custom Name Prefix**: A prefix that will be added to the names of downloaded files.  
+  **Default**: `""` (empty string)
+
+- **Open in New Tab**: Option to open the MeTube instance in a new tab after adding to the queue.  
+  **Default**: `false`
+
+- **Show Context Menu**: Displays a context menu on supported sites (e.g., YouTube, Vimeo).  
+  **Default**: `false`
+
+- **Auto Start**: Automatically starts the download when the file is ready.  
+  **Default**: `true`
+
+- **One-Click Mode**: Sends the current page to the MeTube instance with one click.  
+  **Default**: `false`
+
+- **Send Custom Headers**: Enables the inclusion of custom headers when queueing to the MeTube instance.  
+  **Default**: `false`
+
+- **Custom Headers**: Specify the custom header name and value for authentication or other purposes.  
+  **Default**: `[]` (empty array)
