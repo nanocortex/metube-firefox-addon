@@ -1,129 +1,145 @@
 html,
 body {
-    font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
-    width: 300px;
-    color: #CFD8DC;
-    background: #263238;
+  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+  width: 300px;
+  color: #CFD8DC;
+  background: #263238;
 }
 
 .hidden {
-    display: none;
+  display: none;
 }
 
 #popup-content,
 #error-content,
 #success-content {
-    text-align: center;
+  text-align: center;
 }
 
 #popup-content div#options-row {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
 }
 
 #popup-content div#options-row #quality-container {
-    margin-right: .5rem;
+  margin-right: .5rem;
 }
 
 label {
-    color: #dedede;
-    font-size: 12px;
-    margin-bottom: .4rem !important;
-    display: inline-block;
-    text-align: left !important;
-    font-weight: 600;
+  color: #dedede;
+  font-size: 12px;
+  margin-bottom: .4rem !important;
+  display: inline-block;
+  text-align: left !important;
+  font-weight: 600;
 }
 
 select {
-    width: 100%;
-    border: none;
-    border-radius: 0.25em;
-    padding: 0.4rem 0.75rem;
-    border: solid 1px #455A64;
-    background-color: #455A64;
-    color: #CFD8DC;
+  width: 100%;
+  border: none;
+  border-radius: 0.25em;
+  padding: 0.4rem 0.75rem;
+  border: solid 1px #455A64;
+  background-color: #455A64;
+  color: #CFD8DC;
 
 }
 
 #buttons-row {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 1rem;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
 }
 
 #buttons-row button {
-    background-color: #0D47A1;
-    border: 1px solid #0D47A1;
-    border-radius: 6px;
-    box-shadow: rgba(0, 0, 0, 0.1) 1px 2px 4px;
-    box-sizing: border-box;
-    color: #fafafa;
-    cursor: pointer;
-    display: inline-block;
-    font-size: .9em;
-    font-weight: 700;
-    line-height: 16px;
-    min-height: 40px;
-    outline: 0;
-    padding: 12px 14px;
-    text-align: center;
-    touch-action: manipulation;
-    vertical-align: middle;
-    transition: all .1s ease;
-    width: 100%;
-    margin-bottom: .25rem;
+  background-color: #0D47A1;
+  border: 1px solid #0D47A1;
+  border-radius: 6px;
+  box-shadow: rgba(0, 0, 0, 0.1) 1px 2px 4px;
+  box-sizing: border-box;
+  color: #fafafa;
+  cursor: pointer;
+  display: inline-block;
+  font-size: .9em;
+  font-weight: 700;
+  line-height: 16px;
+  min-height: 40px;
+  outline: 0;
+  padding: 12px 14px;
+  text-align: center;
+  touch-action: manipulation;
+  vertical-align: middle;
+  transition: all .1s ease;
+  width: 100%;
+  margin-bottom: .25rem;
 }
 
 #buttons-row button:hover,
 #buttons-row button:active {
-    transition: all .1s ease;
-    opacity: .8;
+  transition: all .1s ease;
+  opacity: .8;
 }
 
 #buttons-row button:active {
-    opacity: .5;
+  opacity: .5;
 }
 
 .row {
-    margin-top: .75rem;
+  margin-top: .75rem;
 }
 
-input[type="text"]
-{
-    width: 100%;
-    font-size: 12px;
-    box-sizing: border-box;
-    border: 1px solid #455A64;
-    background-color: #455A64;
-    border-radius: .25em;
-    padding: 0.4rem 0.75rem;
-    color: #CFD8DC;
+input[type="text"] {
+  width: 100%;
+  font-size: 12px;
+  box-sizing: border-box;
+  border: 1px solid #455A64;
+  background-color: #455A64;
+  border-radius: .25em;
+  padding: 0.4rem 0.75rem;
+  color: #CFD8DC;
 }
 
 input::placeholder {
-    color: #CFD8DC;
+  color: #CFD8DC;
 }
 
 .send-to-metube {
-    display: flex !important;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
 }
 
 .spinner {
-    width: 1rem;
-    height: 1rem;
-    border: 3px solid rgba(255,255,255,.3);
-    border-radius: 50%;
-    border-top-color: #fff;
-    animation: spin 1s ease-in-out infinite;
-    -webkit-animation: spin 1s ease-in-out infinite;
+  width: 1rem;
+  height: 1rem;
+  border: 3px solid rgba(255, 255, 255, .3);
+  border-radius: 50%;
+  border-top-color: #fff;
+  animation: spin 1s ease-in-out infinite;
+  -webkit-animation: spin 1s ease-in-out infinite;
 }
 
 @keyframes spin {
-    to { -webkit-transform: rotate(360deg); }
+  to {
+    -webkit-transform: rotate(360deg);
+  }
 }
+
 @-webkit-keyframes spin {
-    to { -webkit-transform: rotate(360deg); }
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+
+#history {
+  font-size: 11px;
+  text-align: left;
+}
+
+#history ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }

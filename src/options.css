@@ -1,52 +1,49 @@
 .hidden {
-    display: none;
+  display: none;
 }
 
 .section {
-    border: 1px solid #ccc;
-    padding: 0 1rem;
-    margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  padding: 0 1rem;
+  margin-bottom: 1rem;
 }
 
 .inline-form-fields {
-    display: flex;
-    align-items: flex-end;
-    gap: 0.5rem;
+  display: flex;
+  align-items: flex-end;
+  gap: 0.5rem;
 }
 
 .inline-form-fields input {
-    display: block;
+  display: block;
 }
 
 .list-unstyled {
-    list-style: none;
-    padding: 0;
+  list-style: none;
+  padding: 0;
 }
 
 .header-pair {
-    display: flex;
-    gap: 0.5rem;
+  display: flex;
+  gap: 0.5rem;
 }
 
 .header-pair code {
-    border: 1px solid #ccc;
-    background-color: #eee;
-    padding: 0.25rem;
+  border: 1px solid #ccc;
+  background-color: #eee;
+  padding: 0.25rem;
 }
 
 .text-danger {
-    color: tomato;
+  color: tomato;
 }
 
 .field {
-    margin-bottom: .75rem;
-}
-
-label {
+  margin-bottom: .75rem;
 }
 
 .field input[type="text"],
 .field select {
-    display: block;
-    margin-top: 0.25rem;
+  display: block;
+  margin-top: 0.25rem;
 }

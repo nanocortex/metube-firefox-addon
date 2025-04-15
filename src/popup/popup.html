@@ -1,62 +1,65 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>MeTube extension popup</title>
-    <link rel="stylesheet" href="popup.css"/>
-</head>
-<body>
-<div id="popup-content">
-    <div id="options-row">
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+
+  <body>
+    <div id="popup-content">
+      <div id="options-row">
         <div id="quality-container">
-            <label for="quality">Quality</label>
-            <select name="quality" id="quality">
-                <option value="best">Best</option>
-                <option value="2160">2160p</option>
-                <option value="1440">1440p</option>
-                <option value="1080">1080p</option>
-                <option value="720">720p</option>
-                <option value="480">480p</option>
-                <option value="worst">Worst</option>
-                <option value="audio">Audio only</option>
-            </select>
+          <label for="quality">Quality</label>
+          <select name="quality" id="quality">
+            <option value="best">Best</option>
+            <option value="2160">2160p</option>
+            <option value="1440">1440p</option>
+            <option value="1080">1080p</option>
+            <option value="720">720p</option>
+            <option value="480">480p</option>
+            <option value="worst">Worst</option>
+            <option value="audio">Audio only</option>
+          </select>
         </div>
         <div id="format-container">
-            <label for="format">Format</label>
-            <select name="format" id="format">
-                <option value="any">Any</option>
-                <option value="mp4">MP4</option>
-                <option value="m4a">M4A</option>
-                <option value="mp3">MP3</option>
-                <option value="opus">OPUS</option>
-                <option value="wav">WAV</option>
-                <option value="flac">FLAC</option>
-                <option value="thumbnail">Thumbnail</option>
-            </select>
+          <label for="format">Format</label>
+          <select name="format" id="format">
+            <option value="any">Any</option>
+            <option value="mp4">MP4</option>
+            <option value="m4a">M4A</option>
+            <option value="mp3">MP3</option>
+            <option value="opus">OPUS</option>
+            <option value="wav">WAV</option>
+            <option value="flac">FLAC</option>
+            <option value="thumbnail">Thumbnail</option>
+          </select>
         </div>
-    </div>
-    <div class="row">
+      </div>
+      <div class="row">
         <label for="urlInput">URL</label>
-        <input id="urlInput" type="text" placeholder="URL">
-    </div>
-    <div class="row">
+        <input id="urlInput" type="text" placeholder="URL" />
+      </div>
+      <div class="row">
         <label for="folder">Folder</label>
-        <input id="folder" type="text" placeholder="Folder">
-    </div>
-    <div id="buttons-row">
+        <input id="folder" type="text" placeholder="Folder" />
+      </div>
+      <div id="buttons-row">
         <button id="sendToMeTube" class="send-to-metube">
-            <span id="loadingSpinner" class="spinner hidden"></span>
-            Send to MeTube
+          <span id="loadingSpinner" class="spinner hidden"></span>
+          Send to MeTube
         </button>
+      </div>
+      <!-- <div id="history"> -->
+      <!--   <span class="spinner"></span> -->
+      <!-- </div> -->
     </div>
-</div>
-<div id="error-content" class="hidden error-msg">
-    <p>Error occurred. Check logs for more information.</p>
-</div>
-<div id="success-content" class="hidden success-msg">
-    <p>Successfully sent to MeTube</p>
-</div>
-<script src="popup.js"></script>
-
-</body>
+    <div id="error-content" class="hidden error-msg">
+      <p>Error occurred. Check logs for more information.</p>
+    </div>
+    <div id="success-content" class="hidden success-msg">
+      <p>Successfully sent to MeTube</p>
+    </div>
+    <script src="popup.js"></script>
+  </body>
 </html>

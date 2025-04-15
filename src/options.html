@@ -1,92 +1,90 @@
-<!DOCTYPE html>
+<!doctype html>
 
 <html>
-<head>
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="options.css"/>
-</head>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="options.css" />
+  </head>
 
-<body>
-<form>
-    <fieldset>
+  <body>
+    <form>
+      <fieldset>
         <legend>Settings:</legend>
         <div class="field">
-            <label for="url">MeTube instance url</label><br>
-            <input type="text" id="url" placeholder="https://meetube.example.com">
+          <label for="url">MeTube instance url</label><br />
+          <input type="text" id="url" placeholder="https://meetube.example.com" />
         </div>
         <div class="field">
-            <label for="defaultQuality">Default quality:</label>
-            <select name="defaultQuality" id="defaultQuality">
-                <option value="best">Best</option>
-                <option value="2160">2160p</option>
-                <option value="1440">1440p</option>
-                <option value="1080">1080p</option>
-                <option value="720">720p</option>
-                <option value="480">480p</option>
-                <option value="worst">Worst</option>
-                <option value="audio">Audio only</option>
-            </select>
+          <label for="defaultQuality">Default quality:</label>
+          <select name="defaultQuality" id="defaultQuality">
+            <option value="best">Best</option>
+            <option value="2160">2160p</option>
+            <option value="1440">1440p</option>
+            <option value="1080">1080p</option>
+            <option value="720">720p</option>
+            <option value="480">480p</option>
+            <option value="worst">Worst</option>
+            <option value="audio">Audio only</option>
+          </select>
         </div>
         <div class="field">
-            <label for="defaultFormat">Default format:</label>
-            <select name="defaultFormat" id="defaultFormat">
-                <option value="any">Any</option>
-                <option value="mp4">MP4</option>
-                <option value="m4a">M4A</option>
-                <option value="mp3">MP3</option>
-                <option value="opus">OPUS</option>
-                <option value="wav">WAV</option>
-                <option value="flac">FLAC</option>
-                <option value="thumbnail">Thumbnail</option>
-            </select>
+          <label for="defaultFormat">Default format:</label>
+          <select name="defaultFormat" id="defaultFormat">
+            <option value="any">Any</option>
+            <option value="mp4">MP4</option>
+            <option value="m4a">M4A</option>
+            <option value="mp3">MP3</option>
+            <option value="opus">OPUS</option>
+            <option value="wav">WAV</option>
+            <option value="flac">FLAC</option>
+            <option value="thumbnail">Thumbnail</option>
+          </select>
         </div>
         <div class="field">
-            <label for="defaultFolder">Default folder</label><br>
-            <input type="text" id="defaultFolder" placeholder="">
+          <label for="defaultFolder">Default folder</label><br />
+          <input type="text" id="defaultFolder" placeholder="" />
         </div>
         <div class="field">
-            <label for="defaultCustomNamePrefix">Custom name prefix</label><br>
-            <input type="text" id="defaultCustomNamePrefix" placeholder="">
+          <label for="defaultCustomNamePrefix">Custom name prefix</label><br />
+          <input type="text" id="defaultCustomNamePrefix" placeholder="" />
         </div>
         <div class="field">
-            <input type="checkbox" id="openInNewTab"/>
-            <label for="openInNewTab">Open MeTube instance in new tab after adding to queue</label>
+          <input type="checkbox" id="openInNewTab" />
+          <label for="openInNewTab">Open MeTube instance in new tab after adding to queue</label>
         </div>
         <div class="field">
-            <input type="checkbox" id="showContextMenu"/>
-            <label for="showContextMenu">Show context menu in supported sites</label>
+          <input type="checkbox" id="showContextMenu" />
+          <label for="showContextMenu">Show context menu in supported sites</label>
         </div>
         <div class="field">
-            <input type="checkbox" id="defaultAutoStart"/>
-            <label for="defaultAutoStart">Auto Start</label>
+          <input type="checkbox" id="defaultAutoStart" />
+          <label for="defaultAutoStart">Auto Start</label>
         </div>
         <div class="field">
-            <input type="checkbox" id="sendCustomHeaders"/>
-            <label for="sendCustomHeaders">Send custom headers</label>
+          <input type="checkbox" id="sendCustomHeaders" />
+          <label for="sendCustomHeaders">Send custom headers</label>
         </div>
         <section id="customHeadersSection" class="section hidden">
-            <p>Custom headers which are included when queueing to MeTube instance.</p>
-            <p>These can be used to provide credentials if your MeTube instance is behind a proxy or auth service.</p>
-            <div class="inline-form-fields">
-                <div>
-                    <label for="headerNameInput">Header name:</label>
-                    <input type="text" id="headerNameInput" placeholder="X-Foo-Header"/>
-                </div>
-                <div>
-                    <label for="headerValueInput">Header value:</label>
-                    <input type="text" id="headerValueInput" placeholder="some-custom-value"/>
-                </div>
-                <button type="button" id="addHeaderButton" aria-label="Add custom header">➕</button>
+          <p>Custom headers which are included when queueing to MeTube instance.</p>
+          <p>These can be used to provide credentials if your MeTube instance is behind a proxy or auth service.</p>
+          <div class="inline-form-fields">
+            <div>
+              <label for="headerNameInput">Header name:</label>
+              <input type="text" id="headerNameInput" placeholder="X-Foo-Header" />
             </div>
-            <div id="headerValidationMessage" class="text-danger"></div>
-            <ul id="headersList" class="list-unstyled"></ul>
+            <div>
+              <label for="headerValueInput">Header value:</label>
+              <input type="text" id="headerValueInput" placeholder="some-custom-value" />
+            </div>
+            <button type="button" id="addHeaderButton" aria-label="Add custom header">➕</button>
+          </div>
+          <div id="headerValidationMessage" class="text-danger"></div>
+          <ul id="headersList" class="list-unstyled"></ul>
         </section>
         <button type="submit">Save</button>
-    </fieldset>
-</form>
+      </fieldset>
+    </form>
 
-<script src="options.js"></script>
-
-</body>
-
+    <script src="options.js"></script>
+  </body>
 </html>
