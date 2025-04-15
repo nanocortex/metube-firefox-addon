@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.5.0 - 2025-04-16
+- Added One-click mode, which automatically send the current page to MeTube instance when you click the extension icon (no popup, default values)
+- Changed Auto Start option to true by default
+- Improved some options description
+
 ## 1.4.2 - 2025-04-15
 - Fixed download folder not properly passed to MeTube when used from popup
 - Improved options readability
