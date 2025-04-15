@@ -73,7 +73,7 @@ async function getDefaultCustomNamePrefix() {
 
 async function getDefaultAutoStart() {
   let item = await browser.storage.sync.get("defaultAutoStart");
-  return item.defaultAutoStart ?? false;
+  return item.defaultAutoStart ?? true;
 }
 
 async function shouldSendCustomHeaders() {

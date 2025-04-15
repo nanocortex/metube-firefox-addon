@@ -74,7 +74,7 @@ function restoreOptions() {
 
   let getDefaultAutoStart = browser.storage.sync.get("defaultAutoStart");
   getDefaultAutoStart.then(function(result) {
-    document.querySelector("#defaultAutoStart").checked = result.defaultAutoStart || false;
+    document.querySelector("#defaultAutoStart").checked = result.defaultAutoStart || true;
   }, onError);
 }
 
