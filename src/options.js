@@ -14,11 +14,14 @@ function saveOptions(e) {
     defaultFolder: document.querySelector("#defaultFolder").value,
     defaultCustomNamePrefix: document.querySelector("#defaultCustomNamePrefix").value,
     defaultAutoStart: document.querySelector("#defaultAutoStart").checked,
+    oneClickMode: document.querySelector("#oneClickMode").checked,
   });
 
   browser.menus.update("send-to-metube", {
     visible: showContextMenu,
   });
+
+  browser.runtime.sendMessage({ command: 'settingsUpdated' });
 }
 
 function restoreOptions() {
@@ -75,6 +78,11 @@ function restoreOptions() {
   let getDefaultAutoStart = browser.storage.sync.get("defaultAutoStart");
   getDefaultAutoStart.then(function(result) {
     document.querySelector("#defaultAutoStart").checked = result.defaultAutoStart || true;
+  }, onError);
+
+  let getOneClickMode = browser.storage.sync.get("oneClickMode");
+  getOneClickMode.then(function(result) {
+    document.querySelector("#oneClickMode").checked = result.oneClickMode || false;
   }, onError);
 }
 

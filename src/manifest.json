@@ -26,8 +26,7 @@
       "19": "icons/icon-19.png",
       "38": "icons/icon-38.png"
     },
-    "default_title": "Send to MeTube",
-    "default_popup": "popup/popup.html"
+    "default_title": "Send to MeTube"
   },
   "browser_specific_settings": {
     "gecko": {

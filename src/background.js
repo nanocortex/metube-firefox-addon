@@ -13,6 +13,24 @@ async function syncContextMenu() {
   });
 }
 
+browser.browserAction.onClicked.addListener(async () => {
+  const oneClickMode = await getOneClickMode();
+
+  if (oneClickMode) {
+    // If one-click mode is enabled, send to MeTube with default values
+    const url = await getCurrentUrl();
+    const quality = await getDefaultQuality();
+    const format = await getDefaultFormat();
+    const folder = await getDefaultFolder();
+    const customNamePrefix = await getDefaultCustomNamePrefix();
+    const autoStart = await getDefaultAutoStart();
+
+    await sendToMeTube(url, quality, format, folder, customNamePrefix, autoStart);
+  }
+
+  // If one-click mode is disabled, the default popup will be shown automatically
+});
+
 browser.menus.create({
   id: "send-to-metube",
   title: "Send to MeTube",
@@ -28,6 +46,7 @@ function showSuccess() {
   console.log(`Successfuly sent to MeTube`);
   browser.runtime.sendMessage({ command: 'success' }).then(function() {
   }, function(e) {
+    console.error(`Error sending success message: ${e}`);
   });
 }
 
@@ -84,6 +103,21 @@ async function shouldSendCustomHeaders() {
 async function customHeaders() {
   let item = await browser.storage.sync.get("customHeaders");
   return item.customHeaders ?? [];
+}
+
+async function getOneClickMode() {
+  let item = await browser.storage.sync.get("oneClickMode");
+  return item.oneClickMode ?? false;
+}
+
+async function updateBrowserActionPopup() {
+  const oneClickMode = await getOneClickMode();
+
+  if (oneClickMode) {
+    browser.browserAction.setPopup({ popup: "" });
+  } else {
+    browser.browserAction.setPopup({ popup: "popup/popup.html" });
+  }
 }
 
 async function sendToMeTube(itemUrl, quality, format, folder, customNamePrefix, autoStart) {
@@ -147,7 +181,10 @@ browser.runtime.onMessage.addListener(async (message) => {
     await sendToMeTube(url, quality, format, folder, customNamePrefix, autoStart);
   } else if (message.command === "fetchHistory") {
     await fetchHistory();
+  } else if (message.command === "settingsUpdated") {
+    await updateBrowserActionPopup();
   }
+
 });
 
 
@@ -184,3 +221,12 @@ async function fetchHistory() {
 
   xhr.send();
 }
+
+updateBrowserActionPopup();
+
+// Listen for storage changes to update browser action popup
+browser.storage.onChanged.addListener(async (changes) => {
+  if ('oneClickMode' in changes) {
+    await updateBrowserActionPopup();
+  }
+});
