@@ -47,3 +47,12 @@ Before use you should configure MeTube instance url in addon preferences`about:a
 
 - **Custom Headers**: Specify the custom header name and value for authentication or other purposes.  
   **Default**: `[]` (empty array)
+
+## Planned features
+
+- [ ] keyboard shortcuts
+- [ ] new tab in popup with download history
+- [ ] option to customize the list of sites where the context menu will appear
+- [ ] enhance the user interface for settings (maybe in separate tab)
+- [ ] upgrade to Manifest V3
+- [ ] Github Actions for creating releases (maybe publish to Mozilla too?)
