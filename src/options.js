@@ -31,6 +31,12 @@ function saveOptions(e) {
   });
 
   browser.runtime.sendMessage({ command: 'settingsUpdated' });
+
+  const saveSuccessMessageEl = document.getElementById("saveSuccessMessage");
+  saveSuccessMessageEl.classList.remove("hidden");
+  setTimeout(() => {
+    saveSuccessMessageEl.classList.add("hidden");
+  }, 3000);
 }
 
 function restoreOptions() {

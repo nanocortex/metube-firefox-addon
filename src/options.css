@@ -38,6 +38,14 @@
   color: tomato;
 }
 
+.text-success {
+  color: green;
+}
+
+#saveSuccessMessage {
+  margin-top: 0.5rem;
+}
+
 .field {
   margin-bottom: .75rem;
 }
