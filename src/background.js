@@ -164,12 +164,25 @@ async function sendToMeTube(itemUrl, quality, format, folder, customNamePrefix, 
         await browser.tabs.create({ 'active': true, 'url': meTubeUrl });
       }
     } else {
-      const errorText = await response.text();
-      await showError('Error occurred: ' + errorText);
+      const contentType = response.headers.get('content-type');
+      let errorMessage;
+
+      if (contentType && contentType.includes('application/json')) {
+        const errorData = await response.json();
+        errorMessage = errorData.error || errorData.message || JSON.stringify(errorData);
+      } else {
+        errorMessage = await response.text();
+      }
+
+      if (errorMessage) {
+        await showError(`MeTube error: ${errorMessage}`);
+      } else {
+        await showError(`MeTube error (HTTP ${response.status}): ${response.statusText}`);
+      }
       console.error("Send to MeTube failed. MeTube url: " + url.toString() + ", itemUrl: " + itemUrl + ", status: " + response.status);
     }
   } catch (error) {
-    await showError(`Error occurred: ${error.message}. Check logs for more details. Instance url: ${meTubeUrl}`);
+    await showError(`Network error: ${error.message}. Check that MeTube URL is correct: ${meTubeUrl}`);
     console.error("Network error:", error);
   }
 }
