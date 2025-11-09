@@ -1,3 +1,5 @@
+let connectionTested = false;
+
 function saveOptions(e) {
   e.preventDefault();
 
@@ -170,6 +172,57 @@ function addCustomHeader(header) {
   headersList.appendChild(listItem);
 }
 
+async function testConnection() {
+  const url = document.querySelector("#url").value;
+  const urlValidationMessageEl = document.getElementById("urlValidationMessage");
+  const testConnectionMessageEl = document.getElementById("testConnectionMessage");
+  const testButton = document.getElementById("testConnection");
+
+  if (!url) {
+    urlValidationMessageEl.innerText = 'Please enter a MeTube URL';
+    return;
+  }
+
+  if (!url.startsWith('http://') && !url.startsWith('https://')) {
+    urlValidationMessageEl.innerText = 'URL must start with http:// or https://';
+    return;
+  }
+
+  urlValidationMessageEl.innerText = '';
+  testConnectionMessageEl.innerText = 'Testing...';
+  testConnectionMessageEl.className = '';
+  testButton.disabled = true;
+
+  try {
+    const response = await fetch(url.toString(), {
+      method: "GET",
+      credentials: "include"
+    });
+
+    if (response.ok) {
+      testConnectionMessageEl.innerText = '✓ Connection successful';
+      testConnectionMessageEl.className = 'text-success';
+      connectionTested = true;
+    } else {
+      testConnectionMessageEl.innerText = `✗ Connection failed: HTTP ${response.status}`;
+      testConnectionMessageEl.className = 'text-danger';
+      connectionTested = false;
+    }
+  } catch (error) {
+    testConnectionMessageEl.innerText = `✗ Connection failed: ${error.message}`;
+    testConnectionMessageEl.className = 'text-danger';
+    connectionTested = false;
+  } finally {
+    testButton.disabled = false;
+  }
+}
+
 document.addEventListener("DOMContentLoaded", setupCustomHeadersSection);
 document.addEventListener("DOMContentLoaded", restoreOptions);
 document.querySelector("form").addEventListener("submit", saveOptions);
+document.getElementById("testConnection").addEventListener("click", testConnection);
+
+document.getElementById("url").addEventListener("input", () => {
+  connectionTested = false;
+  document.getElementById("testConnectionMessage").innerText = '';
+});

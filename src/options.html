@@ -12,8 +12,12 @@
         <legend>Settings:</legend>
         <div class="field">
           <label for="url">MeTube instance url</label><br />
-          <input type="text" id="url" placeholder="https://meetube.example.com" />
+          <div class="url-test-container">
+            <input type="text" id="url" placeholder="https://meetube.example.com" />
+            <button type="button" id="testConnection">Test</button>
+          </div>
           <div id="urlValidationMessage" class="text-danger"></div>
+          <div id="testConnectionMessage"></div>
         </div>
         <div class="field">
           <label for="defaultQuality">Default quality:</label>
