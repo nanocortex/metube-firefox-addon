@@ -126,34 +126,51 @@ async function sendToMeTube(itemUrl, quality, format, folder, customNamePrefix, 
   let meTubeUrl = await getMeTubeUrl();
   if (!meTubeUrl) {
     await showError('MeTube instance url not configured. Go to about:addons to configure.');
+    return;
   }
 
   let url = new URL("add", meTubeUrl);
-  let xhr = new XMLHttpRequest();
-  xhr.open("POST", url.toString());
+
+  const headers = {
+    "Content-Type": "application/json"
+  };
 
   const useCustomHeaders = await shouldSendCustomHeaders();
   if (useCustomHeaders) {
-    const headers = await customHeaders();
-    headers.forEach(header => {
-      xhr.setRequestHeader(header.name, header.value);
+    const customHeadersList = await customHeaders();
+    customHeadersList.forEach(header => {
+      headers[header.name] = header.value;
     });
   }
 
-  xhr.send(JSON.stringify({ "url": itemUrl, "quality": quality, "format": format, "folder": folder, "custom_name_prefix": customNamePrefix, "auto_start": autoStart }));
-  xhr.onload = async function() {
-    if (xhr.status === 200) {
+  try {
+    const response = await fetch(url.toString(), {
+      method: "POST",
+      credentials: "include", // This includes cookies from the browser
+      headers: headers,
+      body: JSON.stringify({
+        "url": itemUrl,
+        "quality": quality,
+        "format": format,
+        "folder": folder,
+        "custom_name_prefix": customNamePrefix,
+        "auto_start": autoStart
+      })
+    });
+
+    if (response.ok) {
       showSuccess();
       if (await shouldOpenInNewTab()) {
         await browser.tabs.create({ 'active': true, 'url': meTubeUrl });
       }
     } else {
-      await showError('Error occurred: ' + xhr.responseText);
-      console.error("Send to MeTube failed. MeTube url: " + url.toString() + ", itemUrl: " + itemUrl);
+      const errorText = await response.text();
+      await showError('Error occurred: ' + errorText);
+      console.error("Send to MeTube failed. MeTube url: " + url.toString() + ", itemUrl: " + itemUrl + ", status: " + response.status);
     }
-  }
-  xhr.onerror = async function() {
-    await showError(`Error occurred. Check logs for more details. Instance url: ${meTubeUrl}`);
+  } catch (error) {
+    await showError(`Error occurred: ${error.message}. Check logs for more details. Instance url: ${meTubeUrl}`);
+    console.error("Network error:", error);
   }
 }
 
@@ -179,48 +196,12 @@ browser.runtime.onMessage.addListener(async (message) => {
     let customNamePrefix = message.customNamePrefix || await getDefaultCustomNamePrefix();
     let autoStart = message.autoStart || await getDefaultAutoStart();
     await sendToMeTube(url, quality, format, folder, customNamePrefix, autoStart);
-  } else if (message.command === "fetchHistory") {
-    await fetchHistory();
   } else if (message.command === "settingsUpdated") {
     await updateBrowserActionPopup();
   }
 
 });
 
-
-async function fetchHistory() {
-  let meTubeUrl = await getMeTubeUrl();
-  if (!meTubeUrl) {
-    await showError('MeTube instance url not configured. Go to about:addons to configure.');
-  }
-
-  let url = new URL("history", meTubeUrl);
-  console.log(`Fetching history from MeTube. Url: ${url.toString()}`);
-  let xhr = new XMLHttpRequest();
-  xhr.open("GET", url.toString(), true);
-
-  const useCustomHeaders = await shouldSendCustomHeaders();
-  if (useCustomHeaders) {
-    const headers = await customHeaders();
-    headers.forEach(header => {
-      xhr.setRequestHeader(header.name, header.value);
-    });
-  }
-
-  xhr.onload = async function() {
-    if (xhr.status === 200) {
-      await browser.runtime.sendMessage({ command: 'history', data: xhr.responseText });
-    } else {
-      await showError('Error occurred: ' + xhr.responseText);
-      console.error("Fetch history failed. MeTube url: " + url.toString());
-    }
-  }
-  xhr.onerror = async function() {
-    await showError(`Error occurred. Check logs for more details. Instance url: ${meTubeUrl}`);
-  }
-
-  xhr.send();
-}
 
 updateBrowserActionPopup();
 

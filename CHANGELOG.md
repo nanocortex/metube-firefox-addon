@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.6.0 - 2025-11-09
+- Added support for authentication via browser cookies (fixes SSO/reverse proxy auth issues)
+- Replaced XMLHttpRequest with modern fetch() API
+- Improved error handling with better error messages
+- Added permissions for cookies and all URLs (required for fetch with credentials)
+
 ## 1.5.0 - 2025-04-16
 - Added One-click mode, which automatically send the current page to MeTube instance when you click the extension icon (no popup, default values)
 - Changed Auto Start option to true by default
