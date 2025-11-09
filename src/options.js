@@ -51,7 +51,7 @@ function restoreOptions() {
 
   let showContextMenu = browser.storage.sync.get("showContextMenu");
   showContextMenu.then(function(result) {
-    document.querySelector("#showContextMenu").checked = result.showContextMenu || false;
+    document.querySelector("#showContextMenu").checked = result.showContextMenu || true;
   }, onError);
 
   let sendCustomHeaders = browser.storage.sync.get("sendCustomHeaders");
