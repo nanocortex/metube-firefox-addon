@@ -38,12 +38,12 @@ browser.menus.create({
 }, onMenuCreated);
 
 async function showError(errorMessage) {
-  console.error(`Error occured: ${errorMessage}`)
+  console.error(`Error occurred: ${errorMessage}`)
   await browser.runtime.sendMessage({ command: 'errorOccurred', errorMessage: errorMessage });
 }
 
 function showSuccess() {
-  console.log(`Successfuly sent to MeTube`);
+  console.log(`Successfully sent to MeTube`);
   browser.runtime.sendMessage({ command: 'success' }).then(function() {
   }, function(e) {
     console.error(`Error sending success message: ${e}`);
