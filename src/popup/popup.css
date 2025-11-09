@@ -19,6 +19,7 @@ body {
 #popup-content div#options-row {
   display: flex;
   justify-content: space-between;
+  margin-top: .75rem;
 }
 
 #popup-content div#options-row #quality-container {

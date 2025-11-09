@@ -8,6 +8,10 @@
 
   <body>
     <div id="popup-content">
+      <div class="row">
+        <label for="urlInput">URL</label>
+        <input id="urlInput" type="text" placeholder="URL" />
+      </div>
       <div id="options-row">
         <div id="quality-container">
           <label for="quality">Quality</label>
@@ -37,12 +41,16 @@
         </div>
       </div>
       <div class="row">
-        <label for="urlInput">URL</label>
-        <input id="urlInput" type="text" placeholder="URL" />
-      </div>
-      <div class="row">
         <label for="folder">Folder</label>
         <input id="folder" type="text" placeholder="Folder" />
+      </div>
+      <div class="row">
+        <label for="customNamePrefix">Custom Name Prefix</label>
+        <input id="customNamePrefix" type="text" placeholder="Custom Name Prefix" />
+      </div>
+      <div class="row">
+        <input type="checkbox" id="autoStart" />
+        <label for="autoStart">Auto Start</label>
       </div>
       <div id="buttons-row">
         <button id="sendToMeTube" class="send-to-metube">

@@ -5,7 +5,9 @@ document.getElementById("sendToMeTube").addEventListener("click", async function
   let format = document.getElementById('format').value;
   let url = document.getElementById('urlInput').value;
   let folder = document.getElementById('folder').value;
-  await browser.runtime.sendMessage({ command: 'sendToMeTube', quality: quality, format: format, url: url, folder: folder });
+  let customNamePrefix = document.getElementById('customNamePrefix').value;
+  let autoStart = document.getElementById('autoStart').checked;
+  await browser.runtime.sendMessage({ command: 'sendToMeTube', quality: quality, format: format, url: url, folder: folder, customNamePrefix: customNamePrefix, autoStart: autoStart });
 });
 
 function showError(errorMessage) {
@@ -83,6 +85,16 @@ async function getDefaultFolder() {
   return item.defaultFolder;
 }
 
+async function getDefaultCustomNamePrefix() {
+  let item = await browser.storage.sync.get("defaultCustomNamePrefix");
+  return item.defaultCustomNamePrefix;
+}
+
+async function getDefaultAutoStart() {
+  let item = await browser.storage.sync.get("defaultAutoStart");
+  return item.defaultAutoStart;
+}
+
 addEventListener('DOMContentLoaded', async (event) => {
   let url = await getCurrentUrl();
   if (url && url.indexOf("://") === -1) url = "";
@@ -90,6 +102,8 @@ addEventListener('DOMContentLoaded', async (event) => {
   document.getElementById('format').value = await getDefaultFormat() || "any";
   document.getElementById('quality').value = await getDefaultQuality() || "best";
   document.getElementById('folder').value = await getDefaultFolder() || "";
+  document.getElementById('customNamePrefix').value = await getDefaultCustomNamePrefix() || "";
+  document.getElementById('autoStart').checked = await getDefaultAutoStart() ?? true;
 
   //await fetchHistory();
 });
