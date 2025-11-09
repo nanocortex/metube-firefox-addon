@@ -126,6 +126,7 @@ function setupCustomHeadersSection() {
 }
 
 function removeCustomHeader(header) {
+  const headersList = document.getElementById('headersList');
   headersList.querySelector(`[data-name="${header.name}"]`)?.remove();
 }
 
