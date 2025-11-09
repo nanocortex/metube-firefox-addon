@@ -2,9 +2,18 @@ function saveOptions(e) {
   e.preventDefault();
 
   let showContextMenu = document.querySelector("#showContextMenu").checked;
+  let url = document.querySelector("#url").value;
+  let urlValidationMessageEl = document.getElementById("urlValidationMessage");
+
+  if (url && !url.startsWith('http://') && !url.startsWith('https://')) {
+    urlValidationMessageEl.innerText = 'URL must start with http:// or https://';
+    return;
+  }
+
+  urlValidationMessageEl.innerText = '';
 
   browser.storage.sync.set({
-    url: document.querySelector("#url").value,
+    url: url,
     defaultQuality: document.querySelector("#defaultQuality").value,
     defaultFormat: document.querySelector("#defaultFormat").value,
     openInNewTab: document.querySelector("#openInNewTab").checked,
