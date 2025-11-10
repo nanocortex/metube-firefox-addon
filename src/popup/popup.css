@@ -144,3 +144,9 @@ input::placeholder {
   padding: 0;
   margin: 0;
 }
+
+.validation-error {
+  color: tomato;
+  font-size: 0.85em;
+  margin-top: 0.25rem;
+}

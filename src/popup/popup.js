@@ -1,9 +1,32 @@
+function showValidationError(message) {
+  const urlValidationMessageEl = document.getElementById('urlValidationMessage');
+  urlValidationMessageEl.innerText = message;
+  urlValidationMessageEl.classList.remove('hidden');
+}
+
+function hideValidationError() {
+  const urlValidationMessageEl = document.getElementById('urlValidationMessage');
+  urlValidationMessageEl.classList.add('hidden');
+}
+
 document.getElementById("sendToMeTube").addEventListener("click", async function() {
+  let url = document.getElementById('urlInput').value;
+
+  if (!url || url.trim() === '') {
+    showValidationError('Please enter a URL');
+    return;
+  }
+
+  if (url.indexOf("://") === -1) {
+    showValidationError('Invalid URL format');
+    return;
+  }
+
+  hideValidationError();
   showLoadingState();
 
   let quality = document.getElementById('quality').value;
   let format = document.getElementById('format').value;
-  let url = document.getElementById('urlInput').value;
   let folder = document.getElementById('folder').value;
   let customNamePrefix = document.getElementById('customNamePrefix').value;
   let autoStart = document.getElementById('autoStart').checked;
