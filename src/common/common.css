@@ -1,0 +1,11 @@
+.hidden {
+  display: none;
+}
+
+.text-danger {
+  color: tomato;
+}
+
+.text-success {
+  color: green;
+}

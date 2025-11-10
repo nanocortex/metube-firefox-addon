@@ -6,10 +6,6 @@ body {
   background: #263238;
 }
 
-.hidden {
-  display: none;
-}
-
 #popup-content,
 #error-content,
 #success-content {
