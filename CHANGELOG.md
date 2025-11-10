@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.6.1 - 2025-11-10
+- Added customNamePrefix and autoStart fields to popup
+- Added quality options 360p and 240p
+- Added URL validation in options and popup
+- Added test connection button in options page
+- Added save success indicator in options page
+- Improved error messages to show actual MeTube responses
+- Fixed context menu default setting to be enabled on first install
+
 ## 1.6.0 - 2025-11-09
 - Added support for authentication via browser cookies (fixes SSO/reverse proxy auth issues)
 - Replaced XMLHttpRequest with modern fetch() API
