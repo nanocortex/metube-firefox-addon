@@ -33,12 +33,22 @@ jobs:
           cd src
           7z a -tzip ../metube_v${{ steps.get_version.outputs.VERSION }}.zip ./*
 
+      - name: Extract changelog for this version
+        id: changelog
+        run: |
+          VERSION=${{ steps.get_version.outputs.VERSION }}
+          # Extract changelog entry for this version
+          CHANGELOG=$(sed -n "/## $VERSION/,/## [0-9]/p" CHANGELOG.md | sed '$d' | tail -n +2)
+          echo "CHANGELOG<<EOF" >> $GITHUB_OUTPUT
+          echo "$CHANGELOG" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
           files: metube_v${{ steps.get_version.outputs.VERSION }}.zip
+          body: ${{ steps.changelog.outputs.CHANGELOG }}
           draft: false
           prerelease: false
-          generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
