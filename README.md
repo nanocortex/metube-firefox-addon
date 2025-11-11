@@ -13,6 +13,18 @@ Addon for queueing videos to [MeTube](https://github.com/alexta69/metube) instan
 
 Before use you should configure MeTube instance url in addon preferences`about:addons`.
 
+### Enabling SSO Support
+
+If your MeTube instance is behind SSO authentication (e.g., Authentik, Authelia, Keycloak):
+
+1. Open extension settings (`about:addons` → MeTube Downloader → Options)
+2. Enter your MeTube instance URL
+3. Check the **"Send cookies for authentication (SSO)"** checkbox
+4. Read the privacy notice that appears explaining why `<all_urls>` permission is needed
+5. Click **"Save Settings"** - Firefox will prompt you to allow access to all websites
+6. Open your MeTube instance in a browser tab and log in through your SSO provider
+7. The extension will now use your existing session cookies to authenticate requests
+
 ## Options
 
 - **MeTube Instance URL**: URL of your MeTube instance (e.g., `https://metube.example.com`).  
