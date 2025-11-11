@@ -188,6 +188,18 @@ browser.runtime.onMessage.addListener(async (message) => {
 
 updateBrowserActionPopup();
 
+browser.commands.onCommand.addListener(async (command) => {
+  if (command === "send-to-metube") {
+    const url = await getCurrentUrl();
+    const quality = await getDefaultQuality();
+    const format = await getDefaultFormat();
+    const folder = await getDefaultFolder();
+    const customNamePrefix = await getDefaultCustomNamePrefix();
+    const autoStart = await getDefaultAutoStart();
+    await sendToMeTube(url, quality, format, folder, customNamePrefix, autoStart);
+  }
+});
+
 // Listen for storage changes to update browser action popup
 browser.storage.onChanged.addListener(async (changes) => {
   if ('oneClickMode' in changes) {
