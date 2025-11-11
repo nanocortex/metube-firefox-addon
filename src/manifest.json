@@ -6,9 +6,11 @@
   "permissions": [
     "activeTab",
     "menus",
-    "storage",
-    "cookies",
-    "<all_urls>"
+    "storage"
+  ],
+  "optional_permissions": [
+    "<all_urls>",
+    "cookies"
   ],
   "homepage_url": "https://github.com/nanocortex/metube-firefox-addon",
   "icons": {

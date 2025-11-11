@@ -48,6 +48,18 @@ Before use you should configure MeTube instance url in addon preferences`about:a
 - **Custom Headers**: Specify the custom header name and value for authentication or other purposes.  
   **Default**: `[]` (empty array)
 
+## Permissions
+
+This extension requires the following permissions:
+
+- **Access browser tabs** (`activeTab`) - To get the current tab's URL when you want to send it to MeTube.
+- **Display context menu** (`menus`) - To show the right-click context menu option.
+- **Store data** (`storage`) - To save your MeTube instance URL and preferences.
+
+**Optional permissions (requested at runtime when SSO is enabled):**
+- **Access all websites** (`<all_urls>`) - Only requested if you enable "Send cookies for authentication (SSO)" in settings. This permission is necessary because SSO authentication systems redirect to different domains (e.g., Authentik, Authelia, Keycloak) for login. The extension only uses this to follow authentication redirects and will only actually access your MeTube instance and authentication provider. If your MeTube instance doesn't require SSO authentication, you can leave this option disabled and no permission will be requested.
+- **Access cookies** - Required for SSO mode to send authentication cookies to your MeTube instance.
+
 ## Planned features
 
 - [ ] keyboard shortcuts
@@ -55,7 +67,7 @@ Before use you should configure MeTube instance url in addon preferences`about:a
 - [ ] option to customize the list of sites where the context menu will appear
 - [ ] enhance the user interface for settings (maybe in separate tab)
 - [ ] upgrade to Manifest V3
-- [ ] Github Actions for creating releases (maybe publish to Mozilla too?)
+- [x] Github Actions for creating releases (maybe publish to Mozilla too?)
 
 ## Contributors
 

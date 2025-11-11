@@ -27,3 +27,25 @@ async function getDefaultAutoStart() {
   let item = await browser.storage.sync.get("defaultAutoStart");
   return item.defaultAutoStart ?? true;
 }
+
+async function requestPermissionsForUrl(url, useCookieAuth) {
+  try {
+    const permissionRequest = {};
+
+    if (useCookieAuth) {
+      // For SSO, request <all_urls> to handle authentication redirects
+      permissionRequest.origins = ["<all_urls>"];
+      permissionRequest.permissions = ["cookies"];
+    } else {
+      // Without SSO, only request specific domain
+      const urlObj = new URL(url);
+      const origin = `${urlObj.protocol}//${urlObj.host}/*`;
+      permissionRequest.origins = [origin];
+    }
+
+    return await browser.permissions.request(permissionRequest);
+  } catch (error) {
+    console.error("Error requesting permission:", error);
+    return false;
+  }
+}
