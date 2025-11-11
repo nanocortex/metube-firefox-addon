@@ -1,18 +1,40 @@
 let connectionTested = false;
 
-function saveOptions(e) {
+async function saveOptions(e) {
   e.preventDefault();
 
   let showContextMenu = document.querySelector("#showContextMenu").checked;
-  let url = document.querySelector("#url").value;
+  let url = document.querySelector("#url").value.trim();
   let urlValidationMessageEl = document.getElementById("urlValidationMessage");
 
-  if (url && !url.startsWith('http://') && !url.startsWith('https://')) {
+  if (!url) {
+    urlValidationMessageEl.innerText = 'MeTube URL is required';
+    return;
+  }
+
+  if (!url.startsWith('http://') && !url.startsWith('https://')) {
     urlValidationMessageEl.innerText = 'URL must start with http:// or https://';
     return;
   }
 
+  try {
+    new URL(url);
+  } catch (error) {
+    urlValidationMessageEl.innerText = 'Invalid URL format';
+    return;
+  }
   urlValidationMessageEl.innerText = '';
+
+  let useCookieAuth = document.querySelector("#useCookieAuth").checked;
+
+  // Request permissions if SSO is enabled
+  if (useCookieAuth) {
+    const granted = await requestPermissionsForUrl(url, useCookieAuth);
+    if (!granted) {
+      urlValidationMessageEl.innerText = 'Permission denied. Cannot enable SSO without permissions.';
+      return;
+    }
+  }
 
   browser.storage.sync.set({
     url: url,
@@ -20,6 +42,7 @@ function saveOptions(e) {
     defaultFormat: document.querySelector("#defaultFormat").value,
     openInNewTab: document.querySelector("#openInNewTab").checked,
     showContextMenu,
+    useCookieAuth: document.querySelector("#useCookieAuth").checked,
     sendCustomHeaders: document.querySelector("#sendCustomHeaders").checked,
     customHeaders: Array.from(document.querySelectorAll('.header-pair')).map(el => ({ name: el.dataset.name, value: el.dataset.value })),
     defaultFolder: document.querySelector("#defaultFolder").value,
@@ -35,7 +58,10 @@ function saveOptions(e) {
   browser.runtime.sendMessage({ command: 'settingsUpdated' });
 
   const saveSuccessMessageEl = document.getElementById("saveSuccessMessage");
+  saveSuccessMessageEl.innerText = '✓ Settings saved!';
+  saveSuccessMessageEl.className = 'text-success';
   saveSuccessMessageEl.classList.remove("hidden");
+
   setTimeout(() => {
     saveSuccessMessageEl.classList.add("hidden");
   }, 3000);
@@ -100,6 +126,16 @@ function restoreOptions() {
   let getOneClickMode = browser.storage.sync.get("oneClickMode");
   getOneClickMode.then(function(result) {
     document.querySelector("#oneClickMode").checked = result.oneClickMode || false;
+  }, onError);
+
+  let getUseCookieAuth = browser.storage.sync.get("useCookieAuth");
+  getUseCookieAuth.then(function(result) {
+    const useCookieAuth = result.useCookieAuth || false;
+    document.querySelector("#useCookieAuth").checked = useCookieAuth;
+    // Show warning if SSO is already enabled
+    if (useCookieAuth) {
+      document.getElementById("ssoWarning").classList.remove("hidden");
+    }
   }, onError);
 }
 
@@ -172,57 +208,21 @@ function addCustomHeader(header) {
   headersList.appendChild(listItem);
 }
 
-async function testConnection() {
-  const url = document.querySelector("#url").value;
-  const urlValidationMessageEl = document.getElementById("urlValidationMessage");
-  const testConnectionMessageEl = document.getElementById("testConnectionMessage");
-  const testButton = document.getElementById("testConnection");
-
-  if (!url) {
-    urlValidationMessageEl.innerText = 'Please enter a MeTube URL';
-    return;
-  }
-
-  if (!url.startsWith('http://') && !url.startsWith('https://')) {
-    urlValidationMessageEl.innerText = 'URL must start with http:// or https://';
-    return;
-  }
-
-  urlValidationMessageEl.innerText = '';
-  testConnectionMessageEl.innerText = 'Testing...';
-  testConnectionMessageEl.className = '';
-  testButton.disabled = true;
-
-  try {
-    const response = await fetch(url.toString(), {
-      method: "GET",
-      credentials: "include"
-    });
-
-    if (response.ok) {
-      testConnectionMessageEl.innerText = '✓ Connection successful';
-      testConnectionMessageEl.className = 'text-success';
-      connectionTested = true;
-    } else {
-      testConnectionMessageEl.innerText = `✗ Connection failed: HTTP ${response.status}`;
-      testConnectionMessageEl.className = 'text-danger';
-      connectionTested = false;
-    }
-  } catch (error) {
-    testConnectionMessageEl.innerText = `✗ Connection failed: ${error.message}`;
-    testConnectionMessageEl.className = 'text-danger';
-    connectionTested = false;
-  } finally {
-    testButton.disabled = false;
-  }
-}
-
 document.addEventListener("DOMContentLoaded", setupCustomHeadersSection);
 document.addEventListener("DOMContentLoaded", restoreOptions);
 document.querySelector("form").addEventListener("submit", saveOptions);
-document.getElementById("testConnection").addEventListener("click", testConnection);
 
 document.getElementById("url").addEventListener("input", () => {
   connectionTested = false;
   document.getElementById("testConnectionMessage").innerText = '';
+});
+
+// Show/hide SSO warning
+document.getElementById("useCookieAuth").addEventListener("change", (event) => {
+  const ssoWarning = document.getElementById("ssoWarning");
+  if (event.target.checked) {
+    ssoWarning.classList.remove("hidden");
+  } else {
+    ssoWarning.classList.add("hidden");
+  }
 });

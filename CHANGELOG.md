@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.6.2 - 2025-11-11
+- Made SSO authentication opt-in with optional permissions (`<all_urls>`, `cookies`)
+- Added privacy notice explaining why broad permissions are needed for SSO redirects
+- Reduced default permissions to `activeTab`, `menus`, and `storage` only
+- Improved error messages for authentication failures
+
 ## 1.6.1 - 2025-11-10
 - Added customNamePrefix and autoStart fields to popup
 - Added quality options 360p and 240p

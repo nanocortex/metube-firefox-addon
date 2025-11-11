@@ -80,6 +80,11 @@ async function getOneClickMode() {
   return item.oneClickMode ?? false;
 }
 
+async function shouldUseCookieAuth() {
+  let item = await browser.storage.sync.get("useCookieAuth");
+  return item.useCookieAuth ?? false;
+}
+
 async function updateBrowserActionPopup() {
   const oneClickMode = await getOneClickMode();
 
@@ -113,10 +118,12 @@ async function sendToMeTube(itemUrl, quality, format, folder, customNamePrefix, 
     });
   }
 
+  const useCookieAuth = await shouldUseCookieAuth();
+
   try {
     const response = await fetch(url.toString(), {
       method: "POST",
-      credentials: "include", // This includes cookies from the browser
+      credentials: useCookieAuth ? "include" : "omit",
       headers: headers,
       body: JSON.stringify({
         "url": itemUrl,
@@ -152,7 +159,17 @@ async function sendToMeTube(itemUrl, quality, format, folder, customNamePrefix, 
       console.error("Send to MeTube failed. MeTube url: " + url.toString() + ", itemUrl: " + itemUrl + ", status: " + response.status);
     }
   } catch (error) {
-    await showError(`Network error: ${error.message}. Check that MeTube URL is correct: ${meTubeUrl}`);
+    // Check if it's a CORS/NetworkError - likely authentication required
+    if (error.message.includes('NetworkError') || error.message.includes('CORS')) {
+      const useCookieAuthEnabled = await shouldUseCookieAuth();
+      if (!useCookieAuthEnabled) {
+        await showError('Connection failed - your MeTube instance appears to require authentication. Please enable "Send cookies for authentication (SSO)" in extension settings (about:addons) and save.');
+      } else {
+        await showError('Authentication failed. Your MeTube instance is redirecting to authentication. This may mean: 1) You need to log in to your MeTube instance in a regular tab first, or 2) Firefox is isolating cookies. Try visiting your MeTube URL in a normal tab while logged in, then use the extension from that same tab.');
+      }
+    } else {
+      await showError(`Network error: ${error.message}. Check that MeTube URL is correct: ${meTubeUrl}`);
+    }
     console.error("Network error:", error);
   }
 }

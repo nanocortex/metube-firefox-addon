@@ -44,21 +44,6 @@
   margin-top: 0.25rem;
 }
 
-.url-test-container {
-  display: flex;
-  gap: 0.5rem;
-  margin-top: 0.25rem;
-}
-
-.url-test-container input {
-  flex: 1;
-  margin-top: 0;
-}
-
-.url-test-container button {
-  padding: 0.25rem 1rem;
-}
-
 #testConnectionMessage {
   margin-top: 0.25rem;
   font-size: 0.9em;

@@ -13,10 +13,7 @@
         <legend>Settings:</legend>
         <div class="field">
           <label for="url">MeTube instance url</label><br />
-          <div class="url-test-container">
-            <input type="text" id="url" placeholder="https://meetube.example.com" />
-            <button type="button" id="testConnection">Test</button>
-          </div>
+          <input type="text" id="url" placeholder="https://metube.example.com" />
           <div id="urlValidationMessage" class="text-danger"></div>
           <div id="testConnectionMessage"></div>
         </div>
@@ -73,6 +70,13 @@
           <label for="oneClickMode">One-click mode - automatically send the current page to MeTube instance when you click the extension icon (no popup, default values)</label>
         </div>
         <div class="field">
+          <input type="checkbox" id="useCookieAuth" />
+          <label for="useCookieAuth">Send cookies for authentication (required for SSO/reverse proxy auth)</label>
+          <div id="ssoWarning" class="hidden" style="margin-top: 0.5rem; padding: 0.5rem; background-color: #fff3cd; border: 1px solid #ffc107; border-radius: 4px;">
+            <strong>⚠️ Privacy Notice:</strong> SSO mode requires access to all websites to follow authentication redirects. The extension will only access your MeTube instance and authentication provider. This permission is necessary because SSO systems can redirect to different domains for login.
+          </div>
+        </div>
+        <div class="field">
           <input type="checkbox" id="sendCustomHeaders" />
           <label for="sendCustomHeaders">Send custom headers</label>
         </div>
@@ -93,11 +97,12 @@
           <div id="headerValidationMessage" class="text-danger"></div>
           <ul id="headersList" class="list-unstyled"></ul>
         </section>
-        <button type="submit">Save</button>
-        <div id="saveSuccessMessage" class="text-success hidden">Settings saved successfully!</div>
+        <button type="submit">Save Settings</button>
+        <div id="saveSuccessMessage" class="text-success hidden"></div>
       </fieldset>
     </form>
 
+    <script src="../common/utils.js"></script>
     <script src="options.js"></script>
   </body>
 </html>
