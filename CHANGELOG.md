@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.6.3 - 2025-11-13
+- Add keyboard shortcut (Ctrl+Shift+M / Cmd+Shift+M) to send current page to MeTube
+- Show loading indicator in popup when using keyboard shortcuts or context menu
+- Prevent duplicate requests when shortcut/context menu is triggered multiple times
+
 ## 1.6.2 - 2025-11-11
 - Made SSO authentication opt-in with optional permissions (`<all_urls>`, `cookies`)
 - Added privacy notice explaining why broad permissions are needed for SSO redirects
