@@ -33,6 +33,14 @@
     },
     "default_title": "Send to MeTube"
   },
+  "commands": {
+    "send-to-metube": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+M"
+      },
+      "description": "Send current page to MeTube"
+    }
+  },
   "browser_specific_settings": {
     "gecko": {
       "id": "{6c6751df-7510-4e27-9637-9ae354c86f8c}"

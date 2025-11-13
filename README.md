@@ -13,6 +13,18 @@ Addon for queueing videos to [MeTube](https://github.com/alexta69/metube) instan
 
 Before use you should configure MeTube instance url in addon preferences`about:addons`.
 
+### Keyboard Shortcuts
+
+The extension supports the following keyboard shortcut:
+
+- **Ctrl+Shift+M** (Windows/Linux) or **Cmd+Shift+M** (Mac) - Send current page to MeTube
+
+You can customize this shortcut in Firefox:
+1. Navigate to `about:addons`
+2. Click the gear icon ⚙️ at the top
+3. Select "Manage Extension Shortcuts"
+4. Find "MeTube Downloader" and customize the "Send current page to MeTube" shortcut
+
 ### Enabling SSO Support
 
 If your MeTube instance is behind SSO authentication (e.g., Authentik, Authelia, Keycloak):
@@ -74,7 +86,7 @@ This extension requires the following permissions:
 
 ## Planned features
 
-- [ ] keyboard shortcuts
+- [x] keyboard shortcuts
 - [ ] new tab in popup with download history
 - [ ] option to customize the list of sites where the context menu will appear
 - [ ] enhance the user interface for settings (maybe in separate tab)

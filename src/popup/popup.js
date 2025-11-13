@@ -56,6 +56,11 @@ function hideLoadingState() {
 }
 
 browser.runtime.onMessage.addListener(async (message) => {
+  if (message.command === "showLoading") {
+    showLoadingState();
+    return;
+  }
+
   hideLoadingState();
 
   if (message.command === "errorOccurred") {

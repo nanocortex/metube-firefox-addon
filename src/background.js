@@ -1,9 +1,13 @@
+let isRequestInProgress = false;
+
 function onMenuCreated() {
   if (browser.runtime.lastError) {
     console.log("error creating item:" + browser.runtime.lastError);
   }
 
-  syncContextMenu();
+  syncContextMenu().then(() => {
+    console.log("Context menu synced");
+  });
 }
 
 async function syncContextMenu() {
@@ -17,18 +21,11 @@ browser.browserAction.onClicked.addListener(async () => {
   const oneClickMode = await getOneClickMode();
 
   if (oneClickMode) {
-    // If one-click mode is enabled, send to MeTube with default values
     const url = await getCurrentUrl();
-    const quality = await getDefaultQuality();
-    const format = await getDefaultFormat();
-    const folder = await getDefaultFolder();
-    const customNamePrefix = await getDefaultCustomNamePrefix();
-    const autoStart = await getDefaultAutoStart();
-
-    await sendToMeTube(url, quality, format, folder, customNamePrefix, autoStart);
+    const options = await getDefaultSendOptions();
+    await sendToMeTube(url, options.quality, options.format, options.folder,
+                       options.customNamePrefix, options.autoStart);
   }
-
-  // If one-click mode is disabled, the default popup will be shown automatically
 });
 
 browser.menus.create({
@@ -39,15 +36,20 @@ browser.menus.create({
 
 async function showError(errorMessage) {
   console.error(`Error occurred: ${errorMessage}`)
-  await browser.runtime.sendMessage({ command: 'errorOccurred', errorMessage: errorMessage });
+  try {
+    await browser.runtime.sendMessage({ command: 'errorOccurred', errorMessage: errorMessage });
+  } catch (e) {
+    console.log(`Popup closed, cannot display error message`);
+  }
 }
 
-function showSuccess() {
-  console.log(`Successfully sent to MeTube`);
-  browser.runtime.sendMessage({ command: 'success' }).then(function() {
-  }, function(e) {
-    console.error(`Error sending success message: ${e}`);
-  });
+async function showSuccess() {
+  console.log('Successfully sent to MeTube');
+  try {
+    await browser.runtime.sendMessage({ command: 'success' });
+  } catch (e) {
+    console.log('Popup closed, cannot display success message');
+  }
 }
 
 async function getMeTubeUrl() {
@@ -95,95 +97,129 @@ async function updateBrowserActionPopup() {
   }
 }
 
+async function getDefaultSendOptions() {
+  return {
+    quality: await getDefaultQuality(),
+    format: await getDefaultFormat(),
+    folder: await getDefaultFolder(),
+    customNamePrefix: await getDefaultCustomNamePrefix(),
+    autoStart: await getDefaultAutoStart()
+  };
+}
+
 async function sendToMeTube(itemUrl, quality, format, folder, customNamePrefix, autoStart) {
-  itemUrl = itemUrl || await getCurrentUrl();
-  console.log(`Send to MeTube. Url: ${itemUrl}, quality: ${quality}, format: ${format}, folder: ${folder}, customNamePrefix: ${customNamePrefix}, autoStart: ${autoStart}`);
-  let meTubeUrl = await getMeTubeUrl();
-  if (!meTubeUrl) {
-    await showError('MeTube instance url not configured. Go to about:addons to configure.');
+  if (isRequestInProgress) {
+    console.log("Request already in progress, ignoring duplicate request");
     return;
   }
 
-  let url = new URL("add", meTubeUrl);
-
-  const headers = {
-    "Content-Type": "application/json"
-  };
-
-  const useCustomHeaders = await shouldSendCustomHeaders();
-  if (useCustomHeaders) {
-    const customHeadersList = await customHeaders();
-    customHeadersList.forEach(header => {
-      headers[header.name] = header.value;
-    });
-  }
-
-  const useCookieAuth = await shouldUseCookieAuth();
+  isRequestInProgress = true;
 
   try {
-    const response = await fetch(url.toString(), {
-      method: "POST",
-      credentials: useCookieAuth ? "include" : "omit",
-      headers: headers,
-      body: JSON.stringify({
-        "url": itemUrl,
-        "quality": quality,
-        "format": format,
-        "folder": folder,
-        "custom_name_prefix": customNamePrefix,
-        "auto_start": autoStart
-      })
-    });
-
-    if (response.ok) {
-      showSuccess();
-      if (await shouldOpenInNewTab()) {
-        await browser.tabs.create({ 'active': true, 'url': meTubeUrl });
-      }
-    } else {
-      const contentType = response.headers.get('content-type');
-      let errorMessage;
-
-      if (contentType && contentType.includes('application/json')) {
-        const errorData = await response.json();
-        errorMessage = errorData.error || errorData.message || JSON.stringify(errorData);
-      } else {
-        errorMessage = await response.text();
-      }
-
-      if (errorMessage) {
-        await showError(`MeTube error: ${errorMessage}`);
-      } else {
-        await showError(`MeTube error (HTTP ${response.status}): ${response.statusText}`);
-      }
-      console.error("Send to MeTube failed. MeTube url: " + url.toString() + ", itemUrl: " + itemUrl + ", status: " + response.status);
+    itemUrl = itemUrl || await getCurrentUrl();
+    console.log(`Send to MeTube. Url: ${itemUrl}, quality: ${quality}, format: ${format}, folder: ${folder}, customNamePrefix: ${customNamePrefix}, autoStart: ${autoStart}`);
+    let meTubeUrl = await getMeTubeUrl();
+    if (!meTubeUrl) {
+      await showError('MeTube instance url not configured. Go to about:addons to configure.');
+      return;
     }
-  } catch (error) {
-    // Check if it's a CORS/NetworkError - likely authentication required
-    if (error.message.includes('NetworkError') || error.message.includes('CORS')) {
-      const useCookieAuthEnabled = await shouldUseCookieAuth();
-      if (!useCookieAuthEnabled) {
-        await showError('Connection failed - your MeTube instance appears to require authentication. Please enable "Send cookies for authentication (SSO)" in extension settings (about:addons) and save.');
-      } else {
-        await showError('Authentication failed. Your MeTube instance is redirecting to authentication. This may mean: 1) You need to log in to your MeTube instance in a regular tab first, or 2) Firefox is isolating cookies. Try visiting your MeTube URL in a normal tab while logged in, then use the extension from that same tab.');
-      }
-    } else {
-      await showError(`Network error: ${error.message}. Check that MeTube URL is correct: ${meTubeUrl}`);
+
+    let url = new URL("add", meTubeUrl);
+
+    const headers = {
+      "Content-Type": "application/json"
+    };
+
+    const useCustomHeaders = await shouldSendCustomHeaders();
+    if (useCustomHeaders) {
+      const customHeadersList = await customHeaders();
+      customHeadersList.forEach(header => {
+        headers[header.name] = header.value;
+      });
     }
-    console.error("Network error:", error);
+
+    const useCookieAuth = await shouldUseCookieAuth();
+
+    try {
+      const response = await fetch(url.toString(), {
+        method: "POST",
+        credentials: useCookieAuth ? "include" : "omit",
+        headers: headers,
+        body: JSON.stringify({
+          "url": itemUrl,
+          "quality": quality,
+          "format": format,
+          "folder": folder,
+          "custom_name_prefix": customNamePrefix,
+          "auto_start": autoStart
+        })
+      });
+
+      if (response.ok) {
+        await showSuccess();
+        if (await shouldOpenInNewTab()) {
+          await browser.tabs.create({ 'active': true, 'url': meTubeUrl });
+        }
+      } else {
+        const contentType = response.headers.get('content-type');
+        let errorMessage;
+
+        if (contentType && contentType.includes('application/json')) {
+          const errorData = await response.json();
+          errorMessage = errorData.error || errorData.message || JSON.stringify(errorData);
+        } else {
+          errorMessage = await response.text();
+        }
+
+        if (errorMessage) {
+          await showError(`MeTube error: ${errorMessage}`);
+        } else {
+          await showError(`MeTube error (HTTP ${response.status}): ${response.statusText}`);
+        }
+        console.error("Send to MeTube failed. MeTube url: " + url.toString() + ", itemUrl: " + itemUrl + ", status: " + response.status);
+      }
+    } catch (error) {
+      // Check if it's a CORS/NetworkError - likely authentication required
+      if (error.message.includes('NetworkError') || error.message.includes('CORS')) {
+        const useCookieAuthEnabled = await shouldUseCookieAuth();
+        if (!useCookieAuthEnabled) {
+          await showError('Connection failed - your MeTube instance appears to require authentication. Please enable "Send cookies for authentication (SSO)" in extension settings (about:addons) and save.');
+        } else {
+          await showError('Authentication failed. Your MeTube instance is redirecting to authentication. This may mean: 1) You need to log in to your MeTube instance in a regular tab first, or 2) Firefox is isolating cookies. Try visiting your MeTube URL in a normal tab while logged in, then use the extension from that same tab.');
+        }
+      } else {
+        await showError(`Network error: ${error.message}. Check that MeTube URL is correct: ${meTubeUrl}`);
+      }
+      console.error("Network error:", error);
+    }
+  } finally {
+    isRequestInProgress = false;
   }
 }
 
-browser.menus.onClicked.addListener(async function(info, tab) {
-  if (info.menuItemId == "send-to-metube") {
-    if (info.linkUrl) {
-      let quality = await getDefaultQuality();
-      let format = await getDefaultFormat();
-      let folder = await getDefaultFolder();
-      let customNamePrefix = await getDefaultCustomNamePrefix();
-      let autoStart = await getDefaultAutoStart();
-      await sendToMeTube(info.linkUrl, quality, format, folder, customNamePrefix, autoStart);
+function triggerSendWithLoading(url) {
+  setTimeout(async () => {
+    try {
+      await browser.runtime.sendMessage({ command: 'showLoading' });
+    } catch (error) {
+      console.error("Failed to send showLoading message:", error);
     }
+
+    const options = await getDefaultSendOptions();
+    await sendToMeTube(url, options.quality, options.format, options.folder,
+                       options.customNamePrefix, options.autoStart);
+  }, 100);
+}
+
+async function sendWithLoadingIndicator(url) {
+  browser.browserAction.setPopup({ popup: "popup/popup.html" });
+  browser.browserAction.openPopup();
+  triggerSendWithLoading(url);
+}
+
+browser.menus.onClicked.addListener(async function(info, tab) {
+  if (info.menuItemId === "send-to-metube" && info.linkUrl) {
+    await sendWithLoadingIndicator(info.linkUrl);
   }
 });
 
@@ -204,6 +240,16 @@ browser.runtime.onMessage.addListener(async (message) => {
 
 
 updateBrowserActionPopup();
+
+browser.commands.onCommand.addListener(async (command) => {
+  if (command === "send-to-metube") {
+    browser.browserAction.setPopup({ popup: "popup/popup.html" });
+    browser.browserAction.openPopup();
+
+    const url = await getCurrentUrl();
+    triggerSendWithLoading(url);
+  }
+});
 
 // Listen for storage changes to update browser action popup
 browser.storage.onChanged.addListener(async (changes) => {
