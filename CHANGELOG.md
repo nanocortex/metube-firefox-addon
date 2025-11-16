@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.6.4 - 2025-11-16
+- Add Strict Playlist Mode option to prevent downloading entire playlists (like YouTube Mixes) when only wanting to save the currently playing video, thanks to [@gmpbigsun](https://github.com/gmpbigsun)
+
 ## 1.6.3 - 2025-11-13
 - Add keyboard shortcut (Ctrl+Shift+M / Cmd+Shift+M) to send current page to MeTube
 - Show loading indicator in popup when using keyboard shortcuts or context menu
