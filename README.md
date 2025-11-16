@@ -63,10 +63,13 @@ If your MeTube instance is behind SSO authentication (e.g., Authentik, Authelia,
 - **Auto Start**: Automatically starts the download when the file is ready.  
   **Default**: `true`
 
-- **One-Click Mode**: Sends the current page to the MeTube instance with one click.  
+- **One-Click Mode**: Sends the current page to the MeTube instance with one click.
   **Default**: `false`
 
-- **Send Custom Headers**: Enables the inclusion of custom headers when queueing to the MeTube instance.  
+- **Strict Playlist Mode**: Only download playlists when URL explicitly points to a playlist. When enabled, prevents downloading entire playlists (like YouTube Mixes) when you only want to save the currently playing video.
+  **Default**: `false`
+
+- **Send Custom Headers**: Enables the inclusion of custom headers when queueing to the MeTube instance.
   **Default**: `false`
 
 - **Custom Headers**: Specify the custom header name and value for authentication or other purposes.  
@@ -100,5 +103,6 @@ Thanks to the following contributors for their work on this project:
 -  [Whale Mo](https://github.com/ncwhale)
 -  [Elwyn](https://github.com/elwynelwyn)
 -  [Ayush Chaurasia](https://github.com/ayushc137)
+-  [gmpbigsun](https://github.com/gmpbigsun)
 
 If you would like to contribute, please create an issue or make a pull request.
