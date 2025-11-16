@@ -28,6 +28,11 @@ async function getDefaultAutoStart() {
   return item.defaultAutoStart ?? true;
 }
 
+async function getDefaultStrictPlaylistMode() {
+  let item = await browser.storage.sync.get("strictPlaylistMode");
+  return item.strictPlaylistMode ?? false;
+}
+
 async function requestPermissionsForUrl(url, useCookieAuth) {
   try {
     const permissionRequest = {};
