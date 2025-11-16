@@ -24,7 +24,7 @@ browser.browserAction.onClicked.addListener(async () => {
     const url = await getCurrentUrl();
     const options = await getDefaultSendOptions();
     await sendToMeTube(url, options.quality, options.format, options.folder,
-                       options.customNamePrefix, options.autoStart);
+                       options.customNamePrefix, options.autoStart, options.strictPlaylistMode);
   }
 });
 
@@ -103,11 +103,12 @@ async function getDefaultSendOptions() {
     format: await getDefaultFormat(),
     folder: await getDefaultFolder(),
     customNamePrefix: await getDefaultCustomNamePrefix(),
-    autoStart: await getDefaultAutoStart()
+    autoStart: await getDefaultAutoStart(),
+    strictPlaylistMode: await getDefaultStrictPlaylistMode()
   };
 }
 
-async function sendToMeTube(itemUrl, quality, format, folder, customNamePrefix, autoStart) {
+async function sendToMeTube(itemUrl, quality, format, folder, customNamePrefix, autoStart, strictPlaylistMode) {
   if (isRequestInProgress) {
     console.log("Request already in progress, ignoring duplicate request");
     return;
@@ -117,7 +118,7 @@ async function sendToMeTube(itemUrl, quality, format, folder, customNamePrefix, 
 
   try {
     itemUrl = itemUrl || await getCurrentUrl();
-    console.log(`Send to MeTube. Url: ${itemUrl}, quality: ${quality}, format: ${format}, folder: ${folder}, customNamePrefix: ${customNamePrefix}, autoStart: ${autoStart}`);
+    console.log(`Send to MeTube. Url: ${itemUrl}, quality: ${quality}, format: ${format}, folder: ${folder}, customNamePrefix: ${customNamePrefix}, autoStart: ${autoStart}, strictPlaylistMode: ${strictPlaylistMode}`);
     let meTubeUrl = await getMeTubeUrl();
     if (!meTubeUrl) {
       await showError('MeTube instance url not configured. Go to about:addons to configure.');
@@ -151,7 +152,8 @@ async function sendToMeTube(itemUrl, quality, format, folder, customNamePrefix, 
           "format": format,
           "folder": folder,
           "custom_name_prefix": customNamePrefix,
-          "auto_start": autoStart
+          "auto_start": autoStart,
+          "playlist_strict_mode": strictPlaylistMode
         })
       });
 
@@ -207,7 +209,7 @@ function triggerSendWithLoading(url) {
 
     const options = await getDefaultSendOptions();
     await sendToMeTube(url, options.quality, options.format, options.folder,
-                       options.customNamePrefix, options.autoStart);
+                       options.customNamePrefix, options.autoStart, options.strictPlaylistMode);
   }, 100);
 }
 
@@ -231,7 +233,8 @@ browser.runtime.onMessage.addListener(async (message) => {
     let folder = message.folder || await getDefaultFolder();
     let customNamePrefix = message.customNamePrefix || await getDefaultCustomNamePrefix();
     let autoStart = message.autoStart || await getDefaultAutoStart();
-    await sendToMeTube(url, quality, format, folder, customNamePrefix, autoStart);
+    let strictPlaylistMode = message.strictPlaylistMode || await getDefaultStrictPlaylistMode();
+    await sendToMeTube(url, quality, format, folder, customNamePrefix, autoStart, strictPlaylistMode);
   } else if (message.command === "settingsUpdated") {
     await updateBrowserActionPopup();
   }

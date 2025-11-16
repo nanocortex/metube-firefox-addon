@@ -30,7 +30,8 @@ document.getElementById("sendToMeTube").addEventListener("click", async function
   let folder = document.getElementById('folder').value;
   let customNamePrefix = document.getElementById('customNamePrefix').value;
   let autoStart = document.getElementById('autoStart').checked;
-  await browser.runtime.sendMessage({ command: 'sendToMeTube', quality: quality, format: format, url: url, folder: folder, customNamePrefix: customNamePrefix, autoStart: autoStart });
+  let strictPlaylistMode = document.getElementById('strictPlaylistMode').checked;
+  await browser.runtime.sendMessage({ command: 'sendToMeTube', quality: quality, format: format, url: url, folder: folder, customNamePrefix: customNamePrefix, autoStart: autoStart, strictPlaylistMode: strictPlaylistMode });
 });
 
 function showError(errorMessage) {
@@ -101,6 +102,7 @@ addEventListener('DOMContentLoaded', async (event) => {
   document.getElementById('folder').value = await getDefaultFolder() || "";
   document.getElementById('customNamePrefix').value = await getDefaultCustomNamePrefix() || "";
   document.getElementById('autoStart').checked = await getDefaultAutoStart() ?? true;
+  document.getElementById('strictPlaylistMode').checked = await getDefaultStrictPlaylistMode() ?? false;
 
   //await fetchHistory();
 });

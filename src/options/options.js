@@ -49,6 +49,7 @@ async function saveOptions(e) {
     defaultCustomNamePrefix: document.querySelector("#defaultCustomNamePrefix").value,
     defaultAutoStart: document.querySelector("#defaultAutoStart").checked,
     oneClickMode: document.querySelector("#oneClickMode").checked,
+    strictPlaylistMode: document.querySelector("#strictPlaylistMode").checked,
   });
 
   browser.menus.update("send-to-metube", {
@@ -126,6 +127,11 @@ function restoreOptions() {
   let getOneClickMode = browser.storage.sync.get("oneClickMode");
   getOneClickMode.then(function(result) {
     document.querySelector("#oneClickMode").checked = result.oneClickMode || false;
+  }, onError);
+
+  let getStrictPlaylistMode = browser.storage.sync.get("strictPlaylistMode");
+  getStrictPlaylistMode.then(function(result) {
+    document.querySelector("#strictPlaylistMode").checked = result.strictPlaylistMode || false;
   }, onError);
 
   let getUseCookieAuth = browser.storage.sync.get("useCookieAuth");
