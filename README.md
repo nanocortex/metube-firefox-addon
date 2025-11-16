@@ -1,17 +1,35 @@
 # Firefox MeTube addon
 
-Addon for queueing videos to [MeTube](https://github.com/alexta69/metube) instance.
+[![Firefox Add-on](https://img.shields.io/amo/v/metube-downloader?label=Firefox%20Add-on)](https://addons.mozilla.org/en-US/firefox/addon/metube-downloader)
+[![License: MPL 2.0](https://img.shields.io/badge/License-MPL%202.0-brightgreen.svg)](https://opensource.org/licenses/MPL-2.0)
+[![GitHub issues](https://img.shields.io/github/issues/nanocortex/metube-firefox-addon)](https://github.com/nanocortex/metube-firefox-addon/issues)
+
+Browser extension for queueing videos to your [MeTube](https://github.com/alexta69/metube) instance.
 
 ![example](https://github.com/nanocortex/metube-firefox-addon/blob/master/assets/scr_context_menu.png?raw=true)
 ![example](https://github.com/nanocortex/metube-firefox-addon/blob/master/assets/scr_button.png?raw=true)
 
-## Installation from store
+## Features
 
-- Install from [Firefox Addons](https://addons.mozilla.org/en-US/firefox/addon/metube-downloader)
+- **One-Click Sending** - Send current page to MeTube with a single click or keyboard shortcut
+- **Context Menu Integration** - Right-click on links to send them directly to MeTube
+- **Keyboard Shortcuts** - Customizable keyboard shortcut (default: Ctrl+Shift+M)
+- **SSO Authentication Support** - Works with SSO systems like Authentik, Authelia, and Keycloak
+- **Custom Headers** - Add custom HTTP headers for authentication or other purposes
+- **Playlist Control** - Strict Playlist Mode prevents unwanted full playlist downloads
+- **Flexible Configuration** - Control quality, format, folder, auto-start, and more
+
+## Installation
+
+Install from [Firefox Add-ons](https://addons.mozilla.org/en-US/firefox/addon/metube-downloader)
+
+See the [CHANGELOG](CHANGELOG.md) for version history and release notes.
 
 ## Usage
 
-Before use you should configure MeTube instance url in addon preferences`about:addons`.
+Before use you should configure MeTube instance URL in addon preferences (`about:addons`).
+
+> **Note**: This extension requires a running [MeTube](https://github.com/alexta69/metube) instance. MeTube is a self-hosted YouTube downloader with a web interface. If you don't have MeTube set up yet, visit the [MeTube project](https://github.com/alexta69/metube) for installation instructions.
 
 ### Keyboard Shortcuts
 
@@ -39,41 +57,20 @@ If your MeTube instance is behind SSO authentication (e.g., Authentik, Authelia,
 
 ## Options
 
-- **MeTube Instance URL**: URL of your MeTube instance (e.g., `https://metube.example.com`).  
-  **Default**: `""` (empty string)
-
-- **Default Quality**: The quality setting for downloads.  
-  **Default**: `best`
-
-- **Default Format**: The format for downloads.  
-  **Default**: `any`
-
-- **Default Folder**: The folder where downloaded files will be saved.  
-  **Default**: `""` (empty string)
-
-- **Custom Name Prefix**: A prefix that will be added to the names of downloaded files.  
-  **Default**: `""` (empty string)
-
-- **Open in New Tab**: Option to open the MeTube instance in a new tab after adding to the queue.  
-  **Default**: `false`
-
-- **Show Context Menu**: Displays a context menu on supported sites (e.g., YouTube, Vimeo).  
-  **Default**: `false`
-
-- **Auto Start**: Automatically starts the download when the file is ready.  
-  **Default**: `true`
-
-- **One-Click Mode**: Sends the current page to the MeTube instance with one click.
-  **Default**: `false`
-
-- **Strict Playlist Mode**: Only download playlists when URL explicitly points to a playlist. When enabled, prevents downloading entire playlists (like YouTube Mixes) when you only want to save the currently playing video.
-  **Default**: `false`
-
-- **Send Custom Headers**: Enables the inclusion of custom headers when queueing to the MeTube instance.
-  **Default**: `false`
-
-- **Custom Headers**: Specify the custom header name and value for authentication or other purposes.  
-  **Default**: `[]` (empty array)
+| Option | Description | Default |
+|--------|-------------|---------|
+| **MeTube Instance URL** | URL of your MeTube instance (e.g., `https://metube.example.com`) | `""` (empty) |
+| **Default Quality** | Quality setting for downloads | `best` |
+| **Default Format** | Format for downloads | `any` |
+| **Default Folder** | Folder where downloaded files will be saved | `""` (empty) |
+| **Custom Name Prefix** | Prefix added to downloaded file names | `""` (empty) |
+| **Open in New Tab** | Open MeTube instance in new tab after adding to queue | `false` |
+| **Show Context Menu** | Display context menu on supported sites | `true` |
+| **Auto Start** | Automatically start downloads when ready | `true` |
+| **One-Click Mode** | Send current page to MeTube with one click | `false` |
+| **Strict Playlist Mode** | Only download playlists when URL explicitly points to one (prevents downloading YouTube Mixes when you only want the current video) | `false` |
+| **Send Custom Headers** | Enable inclusion of custom headers when queueing | `false` |
+| **Custom Headers** | Specify custom header names and values for authentication or other purposes | `[]` (empty) |
 
 ## Permissions
 
@@ -96,7 +93,16 @@ This extension requires the following permissions:
 - [ ] upgrade to Manifest V3
 - [x] Github Actions for creating releases (maybe publish to Mozilla too?)
 
-## Contributors
+## Development
+
+### Loading for Development
+1. Navigate to `about:debugging#/runtime/this-firefox`
+2. Click "Load Temporary Add-on"
+3. Select `src/manifest.json` from this repository
+
+## Contributing
+
+If you would like to contribute, please [create an issue](https://github.com/nanocortex/metube-firefox-addon/issues) or make a pull request.
 
 Thanks to the following contributors for their work on this project:
 
@@ -105,4 +111,6 @@ Thanks to the following contributors for their work on this project:
 -  [Ayush Chaurasia](https://github.com/ayushc137)
 -  [gmpbigsun](https://github.com/gmpbigsun)
 
-If you would like to contribute, please create an issue or make a pull request.
+## License
+
+This project is licensed under the [Mozilla Public License Version 2.0](LICENSE).
