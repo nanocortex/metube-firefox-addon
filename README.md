@@ -6,8 +6,11 @@
 
 Browser extension for queueing videos to your [MeTube](https://github.com/alexta69/metube) instance.
 
-![example](https://github.com/nanocortex/metube-firefox-addon/blob/master/assets/scr_context_menu.png?raw=true)
-![example](https://github.com/nanocortex/metube-firefox-addon/blob/master/assets/scr_button.png?raw=true)
+### Context Menu Integration
+![Context menu on video links](https://github.com/nanocortex/metube-firefox-addon/blob/master/assets/scr_context_menu.png?raw=true)
+
+### Popup Interface
+![Extension popup with options](https://github.com/nanocortex/metube-firefox-addon/blob/master/assets/scr_button.png?raw=true)
 
 ## Features
 
@@ -27,9 +30,16 @@ See the [CHANGELOG](CHANGELOG.md) for version history and release notes.
 
 ## Usage
 
-Before use you should configure MeTube instance URL in addon preferences (`about:addons`).
-
 > **Note**: This extension requires a running [MeTube](https://github.com/alexta69/metube) instance. MeTube is a self-hosted YouTube downloader with a web interface. If you don't have MeTube set up yet, visit the [MeTube project](https://github.com/alexta69/metube) for installation instructions.
+
+### Basic Usage
+
+1. Configure your MeTube instance URL in addon preferences (`about:addons` → MeTube Downloader → Options)
+2. Navigate to any video page (YouTube, Vimeo, etc.)
+3. Send to MeTube using one of these methods:
+   - Click the extension icon in the toolbar
+   - Use the keyboard shortcut `Ctrl+Shift+M` (or `Cmd+Shift+M` on Mac)
+   - Right-click on a video link and select "Send to MeTube" (if context menu is enabled)
 
 ### Keyboard Shortcuts
 
@@ -84,7 +94,35 @@ This extension requires the following permissions:
 - **Access all websites** (`<all_urls>`) - Only requested if you enable "Send cookies for authentication (SSO)" in settings. This permission is necessary because SSO authentication systems redirect to different domains (e.g., Authentik, Authelia, Keycloak) for login. The extension only uses this to follow authentication redirects and will only actually access your MeTube instance and authentication provider. If your MeTube instance doesn't require SSO authentication, you can leave this option disabled and no permission will be requested.
 - **Access cookies** - Required for SSO mode to send authentication cookies to your MeTube instance.
 
-## Planned features
+## Troubleshooting
+
+### Connection Issues
+
+**Error: "MeTube instance url not configured"**
+- Go to `about:addons` → MeTube Downloader → Options and enter your MeTube URL
+
+**Error: "Connection failed - your MeTube instance appears to require authentication"**
+- Your MeTube instance is behind SSO/authentication
+- Enable "Send cookies for authentication (SSO)" in extension settings
+- See [Enabling SSO Support](#enabling-sso-support) section above
+
+**Error: "Authentication failed. Your MeTube instance is redirecting to authentication"**
+- You need to log in to your MeTube instance first
+- Open your MeTube URL in a regular browser tab and log in through your SSO provider
+- Then try using the extension again from that same tab
+
+### Other Issues
+
+**Context menu not appearing**
+- Go to extension settings and enable "Show Context Menu"
+
+**One-click mode not working**
+- Verify "One-Click Mode" is enabled in settings
+- The extension popup will be disabled when one-click mode is active
+
+For other issues, please [create an issue on GitHub](https://github.com/nanocortex/metube-firefox-addon/issues).
+
+## Roadmap
 
 - [x] keyboard shortcuts
 - [ ] new tab in popup with download history
@@ -99,6 +137,10 @@ This extension requires the following permissions:
 1. Navigate to `about:debugging#/runtime/this-firefox`
 2. Click "Load Temporary Add-on"
 3. Select `src/manifest.json` from this repository
+
+## Support
+
+Having issues? Check the [Troubleshooting](#troubleshooting) section above or [create an issue on GitHub](https://github.com/nanocortex/metube-firefox-addon/issues).
 
 ## Contributing
 
