@@ -111,6 +111,14 @@ This extension requires the following permissions:
 - Open your MeTube URL in a regular browser tab and log in through your SSO provider
 - Then try using the extension again from that same tab
 
+### Debugging and Viewing Logs
+
+To view detailed error messages and logs:
+1. Navigate to `about:debugging#/runtime/this-firefox`
+2. Find "MeTube Downloader" and click "Inspect"
+3. Go to the Console tab
+4. Try sending a video to MeTube and check the console for error details
+
 ### Other Issues
 
 **Context menu not appearing**
@@ -128,6 +136,9 @@ For other issues, please [create an issue on GitHub](https://github.com/nanocort
 - [ ] new tab in popup with download history
 - [ ] option to customize the list of sites where the context menu will appear
 - [ ] enhance the user interface for settings (maybe in separate tab)
+- [ ] dark/light mode theme support for popup and options pages
+- [ ] Chrome/Edge browser port (cross-browser compatibility)
+- [ ] mobile Firefox support (optimize UI for Firefox on Android)
 - [ ] upgrade to Manifest V3
 - [x] Github Actions for creating releases (maybe publish to Mozilla too?)
 
