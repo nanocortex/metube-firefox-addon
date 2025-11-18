@@ -101,10 +101,18 @@ This extension requires the following permissions:
 **Error: "MeTube instance url not configured"**
 - Go to `about:addons` → MeTube Downloader → Options and enter your MeTube URL
 
-**Error: "Connection failed - your MeTube instance appears to require authentication"**
-- Your MeTube instance is behind SSO/authentication
-- Enable "Send cookies for authentication (SSO)" in extension settings
-- See [Enabling SSO Support](#enabling-sso-support) section above
+**Error: "Connection failed" with HTTP URLs (e.g., `http://server:5510`)**
+- Firefox HTTPS-Only Mode blocks HTTP requests from extensions ([Firefox bug #1685862](https://bugzilla.mozilla.org/show_bug.cgi?id=1685862))
+- **Important**: Site exceptions do NOT work for extension requests - this is a known Firefox limitation
+- **Workaround**: Use direct IP address instead of hostname (e.g., `http://192.168.1.100:5510` instead of `http://server.local:5510`)
+  - Firefox has built-in HTTPS-Only Mode exemptions for local IP addresses
+- **Solution 1**: Disable HTTPS-Only Mode entirely (Settings → Privacy & Security → HTTPS-Only Mode → "Don't enable")
+- **Solution 2**: Use HTTPS with a reverse proxy
+
+**Error: "Connection failed" with HTTPS URLs**
+- **Self-signed certificate**: Visit your MeTube URL in a browser tab first and accept the security warning/certificate
+- **CORS not configured**: MeTube needs proper CORS headers (usually configured via reverse proxy)
+- **SSO/Authentication**: Enable "Send cookies for authentication (SSO)" in extension settings (see [Enabling SSO Support](#enabling-sso-support))
 
 **Error: "Authentication failed. Your MeTube instance is redirecting to authentication"**
 - You need to log in to your MeTube instance first
