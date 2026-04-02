@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.6.5 - 2026-04-02
+- Add page context menu - right-click on a video page to send current URL to MeTube (not just links)
+- New setting to enable/disable page context menu independently from link context menu
+
 ## 1.6.4 - 2025-11-16
 - Add Strict Playlist Mode option to prevent downloading entire playlists (like YouTube Mixes) when only wanting to save the currently playing video, thanks to [@gmpbigsun](https://github.com/gmpbigsun)
 
