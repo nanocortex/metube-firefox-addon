@@ -10,10 +10,27 @@ function onMenuCreated() {
   });
 }
 
+function onPageMenuCreated() {
+  if (browser.runtime.lastError) {
+    console.log("error creating page menu item:" + browser.runtime.lastError);
+  }
+
+  syncPageContextMenu().then(() => {
+    console.log("Page context menu synced");
+  });
+}
+
 async function syncContextMenu() {
   let showContextMenu = await shouldShowContextMenu();
   browser.menus.update("send-to-metube", {
     visible: showContextMenu,
+  });
+}
+
+async function syncPageContextMenu() {
+  let showPageContextMenu = await shouldShowPageContextMenu();
+  browser.menus.update("send-to-metube-page", {
+    visible: showPageContextMenu,
   });
 }
 
@@ -33,6 +50,12 @@ browser.menus.create({
   title: "Send to MeTube",
   contexts: ["link"]
 }, onMenuCreated);
+
+browser.menus.create({
+  id: "send-to-metube-page",
+  title: "Send page to MeTube",
+  contexts: ["page"]
+}, onPageMenuCreated);
 
 async function showError(errorMessage) {
   console.error(`Error occurred: ${errorMessage}`)
@@ -65,6 +88,11 @@ async function shouldOpenInNewTab() {
 async function shouldShowContextMenu() {
   let item = await browser.storage.sync.get("showContextMenu");
   return 'showContextMenu' in item ? item.showContextMenu : true;
+}
+
+async function shouldShowPageContextMenu() {
+  let item = await browser.storage.sync.get("showPageContextMenu");
+  return item.showPageContextMenu ?? true;
 }
 
 async function shouldSendCustomHeaders() {
@@ -224,6 +252,8 @@ async function sendWithLoadingIndicator(url) {
 browser.menus.onClicked.addListener(async function(info, tab) {
   if (info.menuItemId === "send-to-metube" && info.linkUrl) {
     await sendWithLoadingIndicator(info.linkUrl);
+  } else if (info.menuItemId === "send-to-metube-page") {
+    await sendWithLoadingIndicator(tab.url);
   }
 });
 
@@ -256,9 +286,12 @@ browser.commands.onCommand.addListener(async (command) => {
   }
 });
 
-// Listen for storage changes to update browser action popup
+// Listen for storage changes to update browser action popup and context menus
 browser.storage.onChanged.addListener(async (changes) => {
   if ('oneClickMode' in changes) {
     await updateBrowserActionPopup();
+  }
+  if ('showPageContextMenu' in changes) {
+    await syncPageContextMenu();
   }
 });

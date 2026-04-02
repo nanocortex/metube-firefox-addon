@@ -4,6 +4,7 @@ async function saveOptions(e) {
   e.preventDefault();
 
   let showContextMenu = document.querySelector("#showContextMenu").checked;
+  let showPageContextMenu = document.querySelector("#showPageContextMenu").checked;
   let url = document.querySelector("#url").value.trim();
   let urlValidationMessageEl = document.getElementById("urlValidationMessage");
 
@@ -42,6 +43,7 @@ async function saveOptions(e) {
     defaultFormat: document.querySelector("#defaultFormat").value,
     openInNewTab: document.querySelector("#openInNewTab").checked,
     showContextMenu,
+    showPageContextMenu,
     useCookieAuth: document.querySelector("#useCookieAuth").checked,
     sendCustomHeaders: document.querySelector("#sendCustomHeaders").checked,
     customHeaders: Array.from(document.querySelectorAll('.header-pair')).map(el => ({ name: el.dataset.name, value: el.dataset.value })),
@@ -54,6 +56,10 @@ async function saveOptions(e) {
 
   browser.menus.update("send-to-metube", {
     visible: showContextMenu,
+  });
+
+  browser.menus.update("send-to-metube-page", {
+    visible: showPageContextMenu,
   });
 
   browser.runtime.sendMessage({ command: 'settingsUpdated' });
@@ -96,6 +102,11 @@ function restoreOptions() {
   let showContextMenu = browser.storage.sync.get("showContextMenu");
   showContextMenu.then(function(result) {
     document.querySelector("#showContextMenu").checked = result.showContextMenu || true;
+  }, onError);
+
+  let showPageContextMenu = browser.storage.sync.get("showPageContextMenu");
+  showPageContextMenu.then(function(result) {
+    document.querySelector("#showPageContextMenu").checked = result.showPageContextMenu ?? true;
   }, onError);
 
   let sendCustomHeaders = browser.storage.sync.get("sendCustomHeaders");

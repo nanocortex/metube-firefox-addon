@@ -15,7 +15,7 @@ Browser extension for queueing videos to your [MeTube](https://github.com/alexta
 ## Features
 
 - **One-Click Sending** - Send current page to MeTube with a single click or keyboard shortcut
-- **Context Menu Integration** - Right-click on links to send them directly to MeTube
+- **Context Menu Integration** - Right-click on links or the page itself to send to MeTube
 - **Keyboard Shortcuts** - Customizable keyboard shortcut (default: Ctrl+Shift+M)
 - **SSO Authentication Support** - Works with SSO systems like Authentik, Authelia, and Keycloak
 - **Custom Headers** - Add custom HTTP headers for authentication or other purposes
@@ -39,7 +39,8 @@ See the [CHANGELOG](CHANGELOG.md) for version history and release notes.
 3. Send to MeTube using one of these methods:
    - Click the extension icon in the toolbar
    - Use the keyboard shortcut `Ctrl+Shift+M` (or `Cmd+Shift+M` on Mac)
-   - Right-click on a video link and select "Send to MeTube" (if context menu is enabled)
+   - Right-click on a video link and select "Send to MeTube"
+   - Right-click on the page itself and select "Send page to MeTube"
 
 ### Keyboard Shortcuts
 
@@ -75,7 +76,8 @@ If your MeTube instance is behind SSO authentication (e.g., Authentik, Authelia,
 | **Default Folder** | Folder where downloaded files will be saved | `""` (empty) |
 | **Custom Name Prefix** | Prefix added to downloaded file names | `""` (empty) |
 | **Open in New Tab** | Open MeTube instance in new tab after adding to queue | `false` |
-| **Show Context Menu** | Display context menu on supported sites | `true` |
+| **Show Context Menu on Links** | Show "Send to MeTube" when right-clicking links | `true` |
+| **Show Context Menu on Page** | Show "Send page to MeTube" when right-clicking the page | `true` |
 | **Auto Start** | Automatically start downloads when ready | `true` |
 | **One-Click Mode** | Send current page to MeTube with one click | `false` |
 | **Strict Playlist Mode** | Only download playlists when URL explicitly points to one (prevents downloading YouTube Mixes when you only want the current video) | `false` |
