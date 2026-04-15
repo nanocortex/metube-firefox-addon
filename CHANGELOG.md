@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.7.0 - 2026-04-15
+- Fix CORS connection errors after MeTube v2025.4.9 update. If you're affected, re-save your settings in about:addons and accept the permission prompt.
+- Improved error messages for connection failures — the addon now detects missing permissions and tells you exactly what to do.
+- Added CORS troubleshooting guide to README for cases where the permission fix alone isn't enough (CORS_ALLOWED_ORIGINS=*).
+
 ## 1.6.5 - 2026-04-02
 - Add page context menu - right-click on a video page to send current URL to MeTube (not just links)
 - New setting to enable/disable page context menu independently from link context menu
