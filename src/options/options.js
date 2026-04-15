@@ -28,13 +28,12 @@ async function saveOptions(e) {
 
   let useCookieAuth = document.querySelector("#useCookieAuth").checked;
 
-  // Request permissions if SSO is enabled
-  if (useCookieAuth) {
-    const granted = await requestPermissionsForUrl(url, useCookieAuth);
-    if (!granted) {
-      urlValidationMessageEl.innerText = 'Permission denied. Cannot enable SSO without permissions.';
-      return;
-    }
+  const granted = await requestPermissionsForUrl(url, useCookieAuth);
+  if (!granted) {
+    urlValidationMessageEl.innerText = useCookieAuth
+      ? 'Permission denied. Cannot enable SSO without permissions.'
+      : 'Permission denied. The extension needs access to your MeTube instance to send requests.';
+    return;
   }
 
   browser.storage.sync.set({

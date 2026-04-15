@@ -212,10 +212,16 @@ async function sendToMeTube(itemUrl, quality, format, folder, customNamePrefix, 
       if (error.message.includes('NetworkError') || error.message.includes('CORS')) {
         console.error("Network error details:", error, "MeTube URL:", meTubeUrl);
 
-        if (meTubeUrl.startsWith('http://')) {
-          await showError('Connection failed with HTTP URL. Common causes: 1) Firefox HTTPS-Only Mode (check about:debugging console for "HTTPS-Only Mode" messages), 2) CORS restrictions, 3) MeTube unreachable. If using HTTPS-Only Mode, you must disable it entirely - site exceptions don\'t work for extensions.');
+        const hasPermission = await browser.permissions.contains({
+          origins: [new URL(meTubeUrl).origin + '/*']
+        });
+
+        if (!hasPermission) {
+          await showError('Connection failed: missing host permission for your MeTube instance. Re-save your settings in addon preferences (about:addons) and accept the permission prompt.');
+        } else if (meTubeUrl.startsWith('http://')) {
+          await showError('Connection failed with HTTP URL. Common causes: 1) Firefox HTTPS-Only Mode (check about:debugging console for "HTTPS-Only Mode" messages), 2) MeTube unreachable. If using HTTPS-Only Mode, you must disable it entirely - site exceptions don\'t work for extensions.');
         } else if (meTubeUrl.startsWith('https://')) {
-          await showError('Connection failed with HTTPS URL. Common causes: 1) Self-signed/invalid certificate (visit MeTube URL in a tab first and accept it), 2) CORS not configured, 3) MeTube unreachable. Check about:debugging console for details.');
+          await showError('Connection failed with HTTPS URL. Common causes: 1) Self-signed/invalid certificate (visit MeTube URL in a tab first and accept it), 2) CORS not configured - set CORS_ALLOWED_ORIGINS=* in MeTube, 3) MeTube unreachable. Check about:debugging console for details.');
         } else {
           await showError('Connection failed. Check that MeTube URL is correct and reachable. View logs at about:debugging for details.');
         }

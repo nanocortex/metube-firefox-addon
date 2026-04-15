@@ -92,8 +92,9 @@ This extension requires the following permissions:
 - **Display context menu** (`menus`) - To show the right-click context menu option.
 - **Store data** (`storage`) - To save your MeTube instance URL and preferences.
 
-**Optional permissions (requested at runtime when SSO is enabled):**
-- **Access all websites** (`<all_urls>`) - Only requested if you enable "Send cookies for authentication (SSO)" in settings. This permission is necessary because SSO authentication systems redirect to different domains (e.g., Authentik, Authelia, Keycloak) for login. The extension only uses this to follow authentication redirects and will only actually access your MeTube instance and authentication provider. If your MeTube instance doesn't require SSO authentication, you can leave this option disabled and no permission will be requested.
+**Runtime permissions (requested when saving settings):**
+- **Access your MeTube instance** - When you save settings, the extension requests permission to access your MeTube URL. This is required for the extension to send requests to your MeTube instance.
+- **Access all websites** (`<all_urls>`) - Only requested if you enable "Send cookies for authentication (SSO)". This is necessary because SSO authentication systems redirect to different domains (e.g., Authentik, Authelia, Keycloak) for login.
 - **Access cookies** - Required for SSO mode to send authentication cookies to your MeTube instance.
 
 ## Troubleshooting
@@ -111,15 +112,36 @@ This extension requires the following permissions:
 - **Solution 1**: Disable HTTPS-Only Mode entirely (Settings → Privacy & Security → HTTPS-Only Mode → "Don't enable")
 - **Solution 2**: Use HTTPS with a reverse proxy
 
-**Error: "Connection failed" with HTTPS URLs**
+**Error: "Connection failed" or CORS errors with HTTPS URLs**
+- **Missing host permission**: Re-save your settings in addon preferences (`about:addons`) and accept the permission prompt when Firefox asks. This is the most common fix.
 - **Self-signed certificate**: Visit your MeTube URL in a browser tab first and accept the security warning/certificate
-- **CORS not configured**: MeTube needs proper CORS headers (usually configured via reverse proxy)
+- **CORS not configured**: If re-saving settings doesn't help, set `CORS_ALLOWED_ORIGINS=*` on your MeTube instance — see [CORS Configuration](#cors-configuration) below.
 - **SSO/Authentication**: Enable "Send cookies for authentication (SSO)" in extension settings (see [Enabling SSO Support](#enabling-sso-support))
 
 **Error: "Authentication failed. Your MeTube instance is redirecting to authentication"**
 - You need to log in to your MeTube instance first
 - Open your MeTube URL in a regular browser tab and log in through your SSO provider
 - Then try using the extension again from that same tab
+
+### CORS Configuration
+
+In most cases, re-saving your addon settings and accepting the permission prompt is enough — Firefox grants the extension direct access to your MeTube instance, bypassing CORS entirely.
+
+If you still get CORS errors after that, you can configure MeTube itself to allow cross-origin requests. Since [MeTube v2025.4.9](https://github.com/alexta69/metube/commit/0072d34), cross-origin requests are denied by default. Set `CORS_ALLOWED_ORIGINS=*` on your MeTube instance (browser extensions use unpredictable `moz-extension://` origins, so `*` is the only viable value).
+
+**Docker Compose:**
+```yaml
+services:
+  metube:
+    image: ghcr.io/alexta69/metube
+    environment:
+      - CORS_ALLOWED_ORIGINS=*
+```
+
+**Docker CLI:**
+```bash
+docker run -e CORS_ALLOWED_ORIGINS=* ghcr.io/alexta69/metube
+```
 
 ### Debugging and Viewing Logs
 
