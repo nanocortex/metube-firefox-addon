@@ -17,33 +17,30 @@
           <div id="urlValidationMessage" class="text-danger"></div>
           <div id="testConnectionMessage"></div>
         </div>
-        <div class="field">
-          <label for="defaultQuality">Default quality:</label>
-          <select name="defaultQuality" id="defaultQuality">
-            <option value="best">Best</option>
-            <option value="2160">2160p</option>
-            <option value="1440">1440p</option>
-            <option value="1080">1080p</option>
-            <option value="720">720p</option>
-            <option value="480">480p</option>
-            <option value="360">360p</option>
-            <option value="240">240p</option>
-            <option value="worst">Worst</option>
-            <option value="audio">Audio only</option>
-          </select>
+        <div class="field" data-field-container>
+          <label for="defaultDownloadType">Default type:</label>
+          <select name="defaultDownloadType" id="defaultDownloadType"></select>
         </div>
-        <div class="field">
+        <div class="field" data-field-container>
+          <label for="defaultCodec">Default codec:</label>
+          <select name="defaultCodec" id="defaultCodec"></select>
+        </div>
+        <div class="field" data-field-container>
           <label for="defaultFormat">Default format:</label>
-          <select name="defaultFormat" id="defaultFormat">
-            <option value="any">Any</option>
-            <option value="mp4">MP4</option>
-            <option value="m4a">M4A</option>
-            <option value="mp3">MP3</option>
-            <option value="opus">OPUS</option>
-            <option value="wav">WAV</option>
-            <option value="flac">FLAC</option>
-            <option value="thumbnail">Thumbnail</option>
-          </select>
+          <select name="defaultFormat" id="defaultFormat"></select>
+        </div>
+        <div class="field" data-field-container>
+          <label for="defaultQuality">Default quality:</label>
+          <select name="defaultQuality" id="defaultQuality"></select>
+        </div>
+        <div class="field" data-field-container>
+          <label for="defaultSubtitleLanguage">Default subtitle language:</label>
+          <input type="text" id="defaultSubtitleLanguage" placeholder="en" list="subtitleLanguageOptions" />
+          <datalist id="subtitleLanguageOptions"></datalist>
+        </div>
+        <div class="field" data-field-container>
+          <label for="defaultSubtitleMode">Default subtitle source:</label>
+          <select name="defaultSubtitleMode" id="defaultSubtitleMode"></select>
         </div>
         <div class="field">
           <label for="defaultFolder">Default folder</label><br />
@@ -110,6 +107,7 @@
       </fieldset>
     </form>
 
+    <script src="../common/formats.js"></script>
     <script src="../common/utils.js"></script>
     <script src="options.js"></script>
   </body>

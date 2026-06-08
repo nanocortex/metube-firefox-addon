@@ -12,14 +12,24 @@ body {
   text-align: center;
 }
 
-#popup-content div#options-row {
+#popup-content .options-row {
   display: flex;
   justify-content: space-between;
+  gap: .5rem;
   margin-top: .75rem;
 }
 
-#popup-content div#options-row #quality-container {
-  margin-right: .5rem;
+#popup-content .options-row.hidden {
+  display: none;
+}
+
+#popup-content .options-row .options-col {
+  flex: 1;
+  min-width: 0;
+}
+
+#popup-content .options-row:has(> .options-col.hidden) .options-col:not(.hidden) {
+  flex-basis: 100%;
 }
 
 label {

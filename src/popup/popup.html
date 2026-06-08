@@ -14,34 +14,35 @@
         <input id="urlInput" type="text" placeholder="URL" />
         <div id="urlValidationMessage" class="validation-error hidden"></div>
       </div>
-      <div id="options-row">
-        <div id="quality-container">
-          <label for="quality">Quality</label>
-          <select name="quality" id="quality">
-            <option value="best">Best</option>
-            <option value="2160">2160p</option>
-            <option value="1440">1440p</option>
-            <option value="1080">1080p</option>
-            <option value="720">720p</option>
-            <option value="480">480p</option>
-            <option value="360">360p</option>
-            <option value="240">240p</option>
-            <option value="worst">Worst</option>
-            <option value="audio">Audio only</option>
-          </select>
+      <div class="options-row">
+        <div class="options-col" data-field-container>
+          <label for="downloadType">Type</label>
+          <select name="downloadType" id="downloadType"></select>
         </div>
-        <div id="format-container">
+        <div class="options-col" data-field-container>
+          <label for="codec">Codec</label>
+          <select name="codec" id="codec"></select>
+        </div>
+      </div>
+      <div class="options-row">
+        <div class="options-col" data-field-container>
           <label for="format">Format</label>
-          <select name="format" id="format">
-            <option value="any">Any</option>
-            <option value="mp4">MP4</option>
-            <option value="m4a">M4A</option>
-            <option value="mp3">MP3</option>
-            <option value="opus">OPUS</option>
-            <option value="wav">WAV</option>
-            <option value="flac">FLAC</option>
-            <option value="thumbnail">Thumbnail</option>
-          </select>
+          <select name="format" id="format"></select>
+        </div>
+        <div class="options-col" data-field-container>
+          <label for="quality">Quality</label>
+          <select name="quality" id="quality"></select>
+        </div>
+      </div>
+        <div class="options-row">
+          <div class="options-col" data-field-container>
+            <label for="subtitleLanguage">Subtitle Language</label>
+            <input id="subtitleLanguage" type="text" placeholder="en" list="subtitleLanguageOptions" />
+            <datalist id="subtitleLanguageOptions"></datalist>
+          </div>
+        <div class="options-col" data-field-container>
+          <label for="subtitleMode">Subtitle Source</label>
+          <select name="subtitleMode" id="subtitleMode"></select>
         </div>
       </div>
       <div class="row">
@@ -76,6 +77,7 @@
     <div id="success-content" class="hidden success-msg">
       <p>Successfully sent to MeTube</p>
     </div>
+    <script src="../common/formats.js"></script>
     <script src="../common/utils.js"></script>
     <script src="popup.js"></script>
   </body>

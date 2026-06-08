@@ -25,13 +25,30 @@ document.getElementById("sendToMeTube").addEventListener("click", async function
   hideValidationError();
   showLoadingState();
 
+  let downloadType = document.getElementById('downloadType').value;
+  let codec = document.getElementById('codec').value;
   let quality = document.getElementById('quality').value;
   let format = document.getElementById('format').value;
+  let subtitleLanguage = document.getElementById('subtitleLanguage').value.trim() || 'en';
+  let subtitleMode = document.getElementById('subtitleMode').value;
   let folder = document.getElementById('folder').value;
   let customNamePrefix = document.getElementById('customNamePrefix').value;
   let autoStart = document.getElementById('autoStart').checked;
   let strictPlaylistMode = document.getElementById('strictPlaylistMode').checked;
-  await browser.runtime.sendMessage({ command: 'sendToMeTube', quality: quality, format: format, url: url, folder: folder, customNamePrefix: customNamePrefix, autoStart: autoStart, strictPlaylistMode: strictPlaylistMode });
+  await browser.runtime.sendMessage({
+    command: 'sendToMeTube',
+    url: url,
+    downloadType: downloadType,
+    codec: codec,
+    quality: quality,
+    format: format,
+    subtitleLanguage: subtitleLanguage,
+    subtitleMode: subtitleMode,
+    folder: folder,
+    customNamePrefix: customNamePrefix,
+    autoStart: autoStart,
+    strictPlaylistMode: strictPlaylistMode,
+  });
 });
 
 function showError(errorMessage) {
@@ -93,18 +110,47 @@ browser.runtime.onMessage.addListener(async (message) => {
   }
 });
 
+function getPopupSelects() {
+  return {
+    type: document.getElementById('downloadType'),
+    codec: document.getElementById('codec'),
+    format: document.getElementById('format'),
+    quality: document.getElementById('quality'),
+    subtitleLanguage: document.getElementById('subtitleLanguage'),
+    subtitleMode: document.getElementById('subtitleMode'),
+  };
+}
+
 addEventListener('DOMContentLoaded', async (event) => {
   let url = await getCurrentUrl();
   if (url && url.indexOf("://") === -1) url = "";
   document.getElementById('urlInput').value = url || "";
-  document.getElementById('format').value = await getDefaultFormat() || "any";
-  document.getElementById('quality').value = await getDefaultQuality() || "best";
+
+  const selects = getPopupSelects();
+  const [defaultType, defaultCodec, defaultFormat, defaultQuality, defaultSubtitleLanguage, defaultSubtitleMode] = await Promise.all([
+    getDefaultDownloadType(),
+    getDefaultCodec(),
+    getDefaultFormat(),
+    getDefaultQuality(),
+    getDefaultSubtitleLanguage(),
+    getDefaultSubtitleMode(),
+  ]);
+
+  populateSelect(selects.type, DOWNLOAD_TYPES, defaultType);
+  populateSelect(selects.codec, VIDEO_CODECS, defaultCodec);
+  populateDatalist(document.getElementById('subtitleLanguageOptions'), SUBTITLE_LANGUAGES);
+  selects.subtitleLanguage.value = defaultSubtitleLanguage;
+  refreshDependentSelects(selects, {
+    format: defaultFormat,
+    quality: defaultQuality,
+    subtitleMode: defaultSubtitleMode,
+  });
+  bindDependentSelects(selects);
+
   document.getElementById('folder').value = await getDefaultFolder() || "";
   document.getElementById('customNamePrefix').value = await getDefaultCustomNamePrefix() || "";
   document.getElementById('autoStart').checked = await getDefaultAutoStart() ?? true;
   document.getElementById('strictPlaylistMode').checked = await getDefaultStrictPlaylistMode() ?? false;
-
-  //await fetchHistory();
 });
 
 async function fetchHistory() {

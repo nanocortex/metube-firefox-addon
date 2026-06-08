@@ -40,8 +40,7 @@ browser.browserAction.onClicked.addListener(async () => {
   if (oneClickMode) {
     const url = await getCurrentUrl();
     const options = await getDefaultSendOptions();
-    await sendToMeTube(url, options.quality, options.format, options.folder,
-                       options.customNamePrefix, options.autoStart, options.strictPlaylistMode);
+    await sendToMeTube(url, options);
   }
 });
 
@@ -127,8 +126,12 @@ async function updateBrowserActionPopup() {
 
 async function getDefaultSendOptions() {
   return {
+    downloadType: await getDefaultDownloadType(),
+    codec: await getDefaultCodec(),
     quality: await getDefaultQuality(),
     format: await getDefaultFormat(),
+    subtitleLanguage: await getDefaultSubtitleLanguage(),
+    subtitleMode: await getDefaultSubtitleMode(),
     folder: await getDefaultFolder(),
     customNamePrefix: await getDefaultCustomNamePrefix(),
     autoStart: await getDefaultAutoStart(),
@@ -136,7 +139,8 @@ async function getDefaultSendOptions() {
   };
 }
 
-async function sendToMeTube(itemUrl, quality, format, folder, customNamePrefix, autoStart, strictPlaylistMode) {
+async function sendToMeTube(itemUrl, options) {
+  const { downloadType, codec, quality, format, subtitleLanguage, subtitleMode, folder, customNamePrefix, autoStart, strictPlaylistMode } = options;
   if (isRequestInProgress) {
     console.log("Request already in progress, ignoring duplicate request");
     return;
@@ -146,7 +150,7 @@ async function sendToMeTube(itemUrl, quality, format, folder, customNamePrefix, 
 
   try {
     itemUrl = itemUrl || await getCurrentUrl();
-    console.log(`Send to MeTube. Url: ${itemUrl}, quality: ${quality}, format: ${format}, folder: ${folder}, customNamePrefix: ${customNamePrefix}, autoStart: ${autoStart}, strictPlaylistMode: ${strictPlaylistMode}`);
+    console.log(`Send to MeTube. Url: ${itemUrl}, downloadType: ${downloadType}, codec: ${codec}, quality: ${quality}, format: ${format}, subtitleLanguage: ${subtitleLanguage}, subtitleMode: ${subtitleMode}, folder: ${folder}, customNamePrefix: ${customNamePrefix}, autoStart: ${autoStart}, strictPlaylistMode: ${strictPlaylistMode}`);
     let meTubeUrl = await getMeTubeUrl();
     if (!meTubeUrl) {
       await showError('MeTube instance url not configured. Go to about:addons to configure.');
@@ -176,12 +180,18 @@ async function sendToMeTube(itemUrl, quality, format, folder, customNamePrefix, 
         headers: headers,
         body: JSON.stringify({
           "url": itemUrl,
+          "download_type": downloadType,
+          "codec": codec,
           "quality": quality,
           "format": format,
           "folder": folder,
           "custom_name_prefix": customNamePrefix,
           "auto_start": autoStart,
-          "playlist_strict_mode": strictPlaylistMode
+          "playlist_strict_mode": strictPlaylistMode,
+          ...(downloadType === "captions" ? {
+            "subtitle_language": subtitleLanguage,
+            "subtitle_mode": subtitleMode,
+          } : {}),
         })
       });
 
@@ -244,8 +254,7 @@ function triggerSendWithLoading(url) {
     }
 
     const options = await getDefaultSendOptions();
-    await sendToMeTube(url, options.quality, options.format, options.folder,
-                       options.customNamePrefix, options.autoStart, options.strictPlaylistMode);
+    await sendToMeTube(url, options);
   }, 100);
 }
 
@@ -266,13 +275,19 @@ browser.menus.onClicked.addListener(async function(info, tab) {
 browser.runtime.onMessage.addListener(async (message) => {
   if (message.command === "sendToMeTube") {
     let url = message.url || await getCurrentUrl();
-    let quality = message.quality || 'best';
-    let format = message.format || 'any';
-    let folder = message.folder || await getDefaultFolder();
-    let customNamePrefix = message.customNamePrefix || await getDefaultCustomNamePrefix();
-    let autoStart = message.autoStart || await getDefaultAutoStart();
-    let strictPlaylistMode = message.strictPlaylistMode || await getDefaultStrictPlaylistMode();
-    await sendToMeTube(url, quality, format, folder, customNamePrefix, autoStart, strictPlaylistMode);
+    const options = {
+      downloadType: message.downloadType || await getDefaultDownloadType(),
+      codec: message.codec || await getDefaultCodec(),
+      quality: message.quality || 'best',
+      format: message.format || 'any',
+      subtitleLanguage: message.subtitleLanguage || await getDefaultSubtitleLanguage(),
+      subtitleMode: message.subtitleMode || await getDefaultSubtitleMode(),
+      folder: message.folder || await getDefaultFolder(),
+      customNamePrefix: message.customNamePrefix || await getDefaultCustomNamePrefix(),
+      autoStart: message.autoStart || await getDefaultAutoStart(),
+      strictPlaylistMode: message.strictPlaylistMode || await getDefaultStrictPlaylistMode(),
+    };
+    await sendToMeTube(url, options);
   } else if (message.command === "settingsUpdated") {
     await updateBrowserActionPopup();
   }

@@ -71,8 +71,12 @@ If your MeTube instance is behind SSO authentication (e.g., Authentik, Authelia,
 | Option | Description | Default |
 |--------|-------------|---------|
 | **MeTube Instance URL** | URL of your MeTube instance (e.g., `https://metube.example.com`) | `""` (empty) |
-| **Default Quality** | Quality setting for downloads | `best` |
-| **Default Format** | Format for downloads | `any` |
+| **Default Type** | What to download: Video, Audio, Captions, or Thumbnail | `video` |
+| **Default Codec** | Preferred video codec (Auto / H.264 / H.265 / AV1 / VP9) — only shown for Video type | `auto` |
+| **Default Format** | Container/format for downloads. Options depend on Type (e.g., MP4/iOS for video, MP3/M4A/OPUS/WAV/FLAC for audio, SRT/VTT/... for captions) | `any` |
+| **Default Quality** | Quality setting. For Video: best/2160p/...; for Audio: bitrate (depends on format). Hidden for Captions/Thumbnail | `best` |
+| **Default Subtitle Language** | Subtitle language code (e.g., `en`, `es`, `zh-Hans`) — only used for Captions type | `en` |
+| **Default Subtitle Source** | Subtitle source preference (prefer manual / manual only / auto only / prefer auto) — only used for Captions type | `prefer_manual` |
 | **Default Folder** | Folder where downloaded files will be saved | `""` (empty) |
 | **Custom Name Prefix** | Prefix added to downloaded file names | `""` (empty) |
 | **Open in New Tab** | Open MeTube instance in new tab after adding to queue | `false` |

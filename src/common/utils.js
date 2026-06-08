@@ -3,6 +3,26 @@ async function getCurrentUrl() {
   return tabs[0].url;
 }
 
+async function getDefaultDownloadType() {
+  let item = await browser.storage.sync.get("defaultDownloadType");
+  return item.defaultDownloadType ?? 'video';
+}
+
+async function getDefaultCodec() {
+  let item = await browser.storage.sync.get("defaultCodec");
+  return item.defaultCodec ?? 'auto';
+}
+
+async function getDefaultSubtitleLanguage() {
+  let item = await browser.storage.sync.get("defaultSubtitleLanguage");
+  return item.defaultSubtitleLanguage ?? 'en';
+}
+
+async function getDefaultSubtitleMode() {
+  let item = await browser.storage.sync.get("defaultSubtitleMode");
+  return item.defaultSubtitleMode ?? 'prefer_manual';
+}
+
 async function getDefaultQuality() {
   let item = await browser.storage.sync.get("defaultQuality");
   return item.defaultQuality ?? 'best';

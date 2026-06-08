@@ -38,8 +38,12 @@ async function saveOptions(e) {
 
   browser.storage.sync.set({
     url: url,
-    defaultQuality: document.querySelector("#defaultQuality").value,
+    defaultDownloadType: document.querySelector("#defaultDownloadType").value,
+    defaultCodec: document.querySelector("#defaultCodec").value,
     defaultFormat: document.querySelector("#defaultFormat").value,
+    defaultQuality: document.querySelector("#defaultQuality").value,
+    defaultSubtitleLanguage: document.querySelector("#defaultSubtitleLanguage").value.trim() || 'en',
+    defaultSubtitleMode: document.querySelector("#defaultSubtitleMode").value,
     openInNewTab: document.querySelector("#openInNewTab").checked,
     showContextMenu,
     showPageContextMenu,
@@ -83,15 +87,7 @@ function restoreOptions() {
     document.querySelector("#url").value = result.url || "";
   }, onError);
 
-  let getDefaultQuality = browser.storage.sync.get("defaultQuality");
-  getDefaultQuality.then(function(result) {
-    document.querySelector("#defaultQuality").value = result.defaultQuality || "best";
-  }, onError);
-
-  let getDefaultFormat = browser.storage.sync.get("defaultFormat");
-  getDefaultFormat.then(function(result) {
-    document.querySelector("#defaultFormat").value = result.defaultFormat || "any";
-  }, onError);
+  restoreDownloadOptions().catch(onError);
 
   let getOpenInNewTab = browser.storage.sync.get("openInNewTab");
   getOpenInNewTab.then(function(result) {
@@ -100,7 +96,7 @@ function restoreOptions() {
 
   let showContextMenu = browser.storage.sync.get("showContextMenu");
   showContextMenu.then(function(result) {
-    document.querySelector("#showContextMenu").checked = result.showContextMenu || true;
+    document.querySelector("#showContextMenu").checked = result.showContextMenu ?? true;
   }, onError);
 
   let showPageContextMenu = browser.storage.sync.get("showPageContextMenu");
@@ -131,7 +127,7 @@ function restoreOptions() {
 
   let getDefaultAutoStart = browser.storage.sync.get("defaultAutoStart");
   getDefaultAutoStart.then(function(result) {
-    document.querySelector("#defaultAutoStart").checked = result.defaultAutoStart || true;
+    document.querySelector("#defaultAutoStart").checked = result.defaultAutoStart ?? true;
   }, onError);
 
   let getOneClickMode = browser.storage.sync.get("oneClickMode");
@@ -153,6 +149,80 @@ function restoreOptions() {
       document.getElementById("ssoWarning").classList.remove("hidden");
     }
   }, onError);
+}
+
+function getDownloadOptionSelects() {
+  return {
+    type: document.querySelector("#defaultDownloadType"),
+    codec: document.querySelector("#defaultCodec"),
+    format: document.querySelector("#defaultFormat"),
+    quality: document.querySelector("#defaultQuality"),
+    subtitleLanguage: document.querySelector("#defaultSubtitleLanguage"),
+    subtitleMode: document.querySelector("#defaultSubtitleMode"),
+  };
+}
+
+function setupDownloadOptionSelects() {
+  const selects = getDownloadOptionSelects();
+  populateSelect(selects.type, DOWNLOAD_TYPES);
+  populateSelect(selects.codec, VIDEO_CODECS);
+  populateSelect(selects.subtitleMode, SUBTITLE_MODES);
+  populateDatalist(document.getElementById('subtitleLanguageOptions'), SUBTITLE_LANGUAGES);
+  refreshDependentSelects(selects);
+  bindDependentSelects(selects);
+}
+
+function migrateLegacyDefaults(stored) {
+  const type = stored.defaultDownloadType;
+  let format = stored.defaultFormat;
+  let quality = stored.defaultQuality;
+
+  if (type) {
+    return { type, codec: stored.defaultCodec ?? 'auto', format: format ?? 'any', quality: quality ?? 'best' };
+  }
+
+  const AUDIO_FORMAT_IDS = AUDIO_FORMATS.map((f) => f.id);
+  let migratedType = 'video';
+
+  if (quality === 'audio' || AUDIO_FORMAT_IDS.includes(format)) {
+    migratedType = 'audio';
+    if (quality === 'audio') quality = 'best';
+    if (!AUDIO_FORMAT_IDS.includes(format)) format = 'm4a';
+  } else if (format === 'thumbnail') {
+    migratedType = 'thumbnail';
+    format = 'jpg';
+    quality = 'best';
+  }
+
+  return {
+    type: migratedType,
+    codec: 'auto',
+    format: format ?? (migratedType === 'video' ? 'any' : undefined),
+    quality: quality ?? 'best',
+  };
+}
+
+async function restoreDownloadOptions() {
+  const stored = await browser.storage.sync.get([
+    "defaultDownloadType",
+    "defaultCodec",
+    "defaultFormat",
+    "defaultQuality",
+    "defaultSubtitleLanguage",
+    "defaultSubtitleMode",
+  ]);
+
+  const resolved = migrateLegacyDefaults(stored);
+  const selects = getDownloadOptionSelects();
+
+  populateSelect(selects.type, DOWNLOAD_TYPES, resolved.type);
+  populateSelect(selects.codec, VIDEO_CODECS, resolved.codec);
+  selects.subtitleLanguage.value = stored.defaultSubtitleLanguage ?? 'en';
+  refreshDependentSelects(selects, {
+    format: resolved.format,
+    quality: resolved.quality,
+    subtitleMode: stored.defaultSubtitleMode ?? 'prefer_manual',
+  });
 }
 
 function showCustomHeadersSection() {
@@ -224,6 +294,7 @@ function addCustomHeader(header) {
   headersList.appendChild(listItem);
 }
 
+document.addEventListener("DOMContentLoaded", setupDownloadOptionSelects);
 document.addEventListener("DOMContentLoaded", setupCustomHeadersSection);
 document.addEventListener("DOMContentLoaded", restoreOptions);
 document.querySelector("form").addEventListener("submit", saveOptions);
