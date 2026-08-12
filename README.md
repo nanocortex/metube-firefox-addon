@@ -20,6 +20,7 @@ Browser extension for queueing videos to your [MeTube](https://github.com/alexta
 - **SSO Authentication Support** - Works with SSO systems like Authentik, Authelia, and Keycloak
 - **Custom Headers** - Add custom HTTP headers for authentication or other purposes
 - **Playlist Control** - Strict Playlist Mode prevents unwanted full playlist downloads
+- **Folder Variables** - Categorize downloads automatically with `%DOMAIN%`, `%DATE%` and friends
 - **Flexible Configuration** - Control quality, format, folder, auto-start, and more
 
 ## Installation
@@ -66,6 +67,36 @@ If your MeTube instance is behind SSO authentication (e.g., Authentik, Authelia,
 6. Open your MeTube instance in a browser tab and log in through your SSO provider
 7. The extension will now use your existing session cookies to authenticate requests
 
+### Folder and Filename Variables
+
+The **Default Folder** and **Custom Name Prefix** settings accept variables that are replaced when the download is queued. This lets you sort downloads automatically instead of typing a folder every time.
+
+| Variable | Replaced with | Example |
+|----------|---------------|---------|
+| `%HOSTNAME%` | Full hostname of the URL | `www.youtube.com` |
+| `%DOMAIN%` | Hostname without a leading `www.` | `youtube.com` |
+| `%DATE%` | Current date, `YYYY-MM-DD` | `2026-08-12` |
+| `%YEAR%` | Current year | `2026` |
+| `%MONTH%` | Current month, zero-padded | `08` |
+| `%DAY%` | Current day, zero-padded | `12` |
+
+**Examples**
+
+| Setting value | Result for a `https://www.youtube.com/watch?v=...` link |
+|---------------|--------------------------------------------------------|
+| `%DOMAIN%` | `youtube.com` |
+| `videos/%DOMAIN%` | `videos/youtube.com` |
+| `%DOMAIN%/%YEAR%/%MONTH%` | `youtube.com/2026/08` |
+| `%DATE% - ` (as name prefix) | `2026-08-12 - ` |
+
+**Notes**
+
+- Variables are resolved against the URL being sent. Right-clicking a link uses that link's hostname, not the hostname of the page you are viewing.
+- Variable names are case-sensitive and must be wrapped in `%`.
+- Unknown variables such as `%FOO%` are left untouched, so existing settings that contain a `%` keep working.
+- Characters that are illegal in file names are replaced with `-`, and a variable that resolves to nothing (for example on `about:` pages) leaves no empty folder behind.
+- Using a folder requires `CUSTOM_DIRS` to be enabled on your MeTube instance.
+
 ## Options
 
 | Option | Description | Default |
@@ -77,8 +108,8 @@ If your MeTube instance is behind SSO authentication (e.g., Authentik, Authelia,
 | **Default Quality** | Quality setting. For Video: best/2160p/...; for Audio: bitrate (depends on format). Hidden for Captions/Thumbnail | `best` |
 | **Default Subtitle Language** | Subtitle language code (e.g., `en`, `es`, `zh-Hans`) — only used for Captions type | `en` |
 | **Default Subtitle Source** | Subtitle source preference (prefer manual / manual only / auto only / prefer auto) — only used for Captions type | `prefer_manual` |
-| **Default Folder** | Folder where downloaded files will be saved | `""` (empty) |
-| **Custom Name Prefix** | Prefix added to downloaded file names | `""` (empty) |
+| **Default Folder** | Folder where downloaded files will be saved. Supports [variables](#folder-and-filename-variables) | `""` (empty) |
+| **Custom Name Prefix** | Prefix added to downloaded file names. Supports [variables](#folder-and-filename-variables) | `""` (empty) |
 | **Open in New Tab** | Open MeTube instance in new tab after adding to queue | `false` |
 | **Show Context Menu on Links** | Show "Send to MeTube" when right-clicking links | `true` |
 | **Show Context Menu on Page** | Show "Send page to MeTube" when right-clicking the page | `true` |

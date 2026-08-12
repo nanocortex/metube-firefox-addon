@@ -150,7 +150,9 @@ async function sendToMeTube(itemUrl, options) {
 
   try {
     itemUrl = itemUrl || await getCurrentUrl();
-    console.log(`Send to MeTube. Url: ${itemUrl}, downloadType: ${downloadType}, codec: ${codec}, quality: ${quality}, format: ${format}, subtitleLanguage: ${subtitleLanguage}, subtitleMode: ${subtitleMode}, folder: ${folder}, customNamePrefix: ${customNamePrefix}, autoStart: ${autoStart}, strictPlaylistMode: ${strictPlaylistMode}`);
+    const resolvedFolder = resolveTemplateVariables(folder, itemUrl);
+    const resolvedCustomNamePrefix = resolveTemplateVariables(customNamePrefix, itemUrl);
+    console.log(`Send to MeTube. Url: ${itemUrl}, downloadType: ${downloadType}, codec: ${codec}, quality: ${quality}, format: ${format}, subtitleLanguage: ${subtitleLanguage}, subtitleMode: ${subtitleMode}, folder: ${resolvedFolder}, customNamePrefix: ${resolvedCustomNamePrefix}, autoStart: ${autoStart}, strictPlaylistMode: ${strictPlaylistMode}`);
     let meTubeUrl = await getMeTubeUrl();
     if (!meTubeUrl) {
       await showError('MeTube instance url not configured. Go to about:addons to configure.');
@@ -184,8 +186,8 @@ async function sendToMeTube(itemUrl, options) {
           "codec": codec,
           "quality": quality,
           "format": format,
-          "folder": folder,
-          "custom_name_prefix": customNamePrefix,
+          "folder": resolvedFolder,
+          "custom_name_prefix": resolvedCustomNamePrefix,
           "auto_start": autoStart,
           "playlist_strict_mode": strictPlaylistMode,
           ...(downloadType === "captions" ? {

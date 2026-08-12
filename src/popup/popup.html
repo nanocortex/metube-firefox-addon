@@ -46,12 +46,12 @@
         </div>
       </div>
       <div class="row">
-        <label for="folder">Folder</label>
-        <input id="folder" type="text" placeholder="Folder" />
+        <label for="folder">Folder</label><span class="hint-marker" title="Variables: %HOSTNAME% %DOMAIN% %DATE% %YEAR% %MONTH% %DAY%&#10;Example: videos/%DOMAIN% → videos/youtube.com" aria-label="Supported variables">&#9432;</span>
+        <input id="folder" type="text" placeholder="Folder" title="Variables: %HOSTNAME% %DOMAIN% %DATE% %YEAR% %MONTH% %DAY%&#10;Example: videos/%DOMAIN% → videos/youtube.com" />
       </div>
       <div class="row">
-        <label for="customNamePrefix">Custom Name Prefix</label>
-        <input id="customNamePrefix" type="text" placeholder="Custom Name Prefix" />
+        <label for="customNamePrefix">Custom Name Prefix</label><span class="hint-marker" title="Variables: %HOSTNAME% %DOMAIN% %DATE% %YEAR% %MONTH% %DAY%&#10;Example: %DATE%_ → 2026-08-12_" aria-label="Supported variables">&#9432;</span>
+        <input id="customNamePrefix" type="text" placeholder="Custom Name Prefix" title="Variables: %HOSTNAME% %DOMAIN% %DATE% %YEAR% %MONTH% %DAY%&#10;Example: %DATE%_ → 2026-08-12_" />
       </div>
       <div class="row">
         <input type="checkbox" id="autoStart" />

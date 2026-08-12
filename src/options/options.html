@@ -45,10 +45,20 @@
         <div class="field">
           <label for="defaultFolder">Default folder</label><br />
           <input type="text" id="defaultFolder" placeholder="" />
+          <div class="field-hint">
+            Variables: <code>%HOSTNAME%</code> <code>%DOMAIN%</code> <code>%DATE%</code> <code>%YEAR%</code>
+            <code>%MONTH%</code> <code>%DAY%</code><br />
+            Example: <code>videos/%DOMAIN%</code> → <code>videos/youtube.com</code>
+          </div>
         </div>
         <div class="field">
           <label for="defaultCustomNamePrefix">Custom name prefix</label><br />
           <input type="text" id="defaultCustomNamePrefix" placeholder="" />
+          <div class="field-hint">
+            Variables: <code>%HOSTNAME%</code> <code>%DOMAIN%</code> <code>%DATE%</code> <code>%YEAR%</code>
+            <code>%MONTH%</code> <code>%DAY%</code><br />
+            Example: <code>%DATE%_</code> → <code>2026-08-12_</code>
+          </div>
         </div>
         <div class="field">
           <input type="checkbox" id="openInNewTab" />

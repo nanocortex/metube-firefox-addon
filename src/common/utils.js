@@ -53,6 +53,67 @@ async function getDefaultStrictPlaylistMode() {
   return item.strictPlaylistMode ?? false;
 }
 
+const UNSAFE_PATH_CHARS = /[\/\\:*?"<>|]/g;
+
+// Security: substituted values come from the page URL, so they must never be
+// able to inject path separators or ".." traversal into the MeTube folder.
+function sanitizeVariableValue(value) {
+  return value
+    .replace(UNSAFE_PATH_CHARS, '-')
+    .replace(/\.{2,}/g, '.')
+    .replace(/^[.\s]+|[.\s]+$/g, '');
+}
+
+function buildTemplateVariables(itemUrl) {
+  let hostname = '';
+  try {
+    hostname = new URL(itemUrl).hostname;
+  } catch (error) {
+    // Non-standard URLs (about:, file:, malformed input) have no hostname.
+    hostname = '';
+  }
+
+  const now = new Date();
+  const pad = (value) => String(value).padStart(2, '0');
+  const year = String(now.getFullYear());
+  const month = pad(now.getMonth() + 1);
+  const day = pad(now.getDate());
+
+  return {
+    HOSTNAME: hostname,
+    DOMAIN: hostname.startsWith('www.') ? hostname.slice(4) : hostname,
+    DATE: `${year}-${month}-${day}`,
+    YEAR: year,
+    MONTH: month,
+    DAY: day,
+  };
+}
+
+// "videos/%DOMAIN%/clips" -> "videos/clips" when %DOMAIN% resolves to nothing.
+function collapsePathSeparators(value) {
+  return value.replace(/\/{2,}/g, '/').replace(/^\/+|\/+$/g, '');
+}
+
+// Unknown tokens are left untouched on purpose: typos stay visible, and
+// pre-existing values containing '%' keep working unchanged.
+function resolveTemplateVariables(template, itemUrl) {
+  if (!template || !template.includes('%')) {
+    return template;
+  }
+
+  const variables = buildTemplateVariables(itemUrl);
+  let substituted = false;
+  const resolved = template.replace(/%([A-Z_]+)%/g, (token, name) => {
+    if (!(name in variables)) {
+      return token;
+    }
+    substituted = true;
+    return sanitizeVariableValue(variables[name]);
+  });
+
+  return substituted ? collapsePathSeparators(resolved) : template;
+}
+
 async function requestPermissionsForUrl(url, useCookieAuth) {
   try {
     const permissionRequest = {};

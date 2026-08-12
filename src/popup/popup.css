@@ -156,3 +156,11 @@ input::placeholder {
   font-size: 0.85em;
   margin-top: 0.25rem;
 }
+
+.hint-marker {
+  margin-left: 6px;
+  font-size: 10px;
+  color: #dedede;
+  opacity: .5;
+  cursor: help;
+}

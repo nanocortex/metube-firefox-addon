@@ -9,3 +9,18 @@
 .text-success {
   color: green;
 }
+
+.field-hint {
+  margin-top: 0.25rem;
+  font-size: 0.85em;
+  line-height: 1.5;
+  text-align: left;
+  color: currentColor;
+  opacity: 0.7;
+}
+
+.field-hint code {
+  padding: 0 0.2em;
+  border-radius: 2px;
+  background-color: rgba(128, 128, 128, 0.25);
+}

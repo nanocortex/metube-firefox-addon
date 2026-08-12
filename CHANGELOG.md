@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+- Default folder and custom name prefix now support variables: `%HOSTNAME%`, `%DOMAIN%`, `%DATE%`, `%YEAR%`, `%MONTH%`, `%DAY%`. For example, a folder of `videos/%DOMAIN%` files a YouTube download under `videos/youtube.com`, so downloads can be categorized by site automatically ([#26](https://github.com/nanocortex/metube-firefox-addon/issues/26)).
+- Variables are resolved against the URL actually being sent, so right-clicking a link uses that link's host rather than the host of the page you're on.
+- Unrecognized `%TOKENS%` are left as-is, so existing folder and prefix values are unaffected.
+
 ## 1.8.0 - 2026-06-08
 - Added support for MeTube's new download options: Type (Video/Audio/Captions/Thumbnail) and Codec (Auto/H.264/H.265/AV1/VP9).
 - Format and Quality dropdowns now adapt to the selected Type, matching MeTube's UI exactly (e.g., Audio shows m4a/mp3/opus/wav/flac with per-format bitrate options; Captions shows srt/txt/vtt/ttml).
