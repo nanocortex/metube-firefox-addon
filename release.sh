@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Check if version parameter is provided
 if [ -z "$1" ]; then
@@ -27,6 +27,14 @@ echo "Current version: $CURRENT_VERSION"
 echo "New version: $NEW_VERSION"
 echo ""
 
+# An "## Unreleased" section is promoted in place instead of adding a blank
+# entry above it, which would otherwise strand the notes already written there.
+if [ -f "CHANGELOG.md" ] && grep -q '^## Unreleased[[:space:]]*$' CHANGELOG.md; then
+  HAS_UNRELEASED=1
+else
+  HAS_UNRELEASED=0
+fi
+
 # Check if there are uncommitted changes
 if [ -n "$(git status --porcelain)" ]; then
   echo "Error: You have uncommitted changes. Please commit or stash them first."
@@ -43,7 +51,11 @@ fi
 # Confirm with user
 echo "This will:"
 echo "  1. Update version in src/manifest.json to $NEW_VERSION"
-echo "  2. Open CHANGELOG.md for you to add release notes"
+if [ "$HAS_UNRELEASED" -eq 1 ]; then
+  echo "  2. Retitle the '## Unreleased' section in CHANGELOG.md to $NEW_VERSION"
+else
+  echo "  2. Open CHANGELOG.md for you to add release notes"
+fi
 echo "  3. Commit the changes"
 echo "  4. Create and push tag v$NEW_VERSION"
 read -p "Continue? (y/n) " -n 1 -r
@@ -68,19 +80,32 @@ echo "Version updated successfully in manifest.json"
 
 # Prepare CHANGELOG.md entry
 CHANGELOG_DATE=$(date +"%Y-%m-%d")
-CHANGELOG_ENTRY="## $NEW_VERSION - $CHANGELOG_DATE\n- \n"
 
 # Check if CHANGELOG.md exists
 if [ -f "CHANGELOG.md" ]; then
-  # Add new entry after the first line (# Changelog)
-  sed -i '' "2i\\
-\\
-$CHANGELOG_ENTRY
-" CHANGELOG.md
+  if [ "$HAS_UNRELEASED" -eq 1 ]; then
+    sed -i '' "s/^## Unreleased[[:space:]]*\$/## $NEW_VERSION - $CHANGELOG_DATE/" CHANGELOG.md
 
-  echo ""
-  echo "CHANGELOG.md has been updated with a template entry."
-  echo "Opening CHANGELOG.md for you to add release notes..."
+    if grep -q "^## $NEW_VERSION - $CHANGELOG_DATE\$" CHANGELOG.md; then
+      echo ""
+      echo "Retitled '## Unreleased' to '## $NEW_VERSION - $CHANGELOG_DATE'."
+    else
+      echo "Error: Failed to retitle the Unreleased section in CHANGELOG.md"
+      exit 1
+    fi
+  else
+    # Add a blank entry after the first line (# Changelog)
+    awk -v heading="## $NEW_VERSION - $CHANGELOG_DATE" '
+      NR == 1 { print; print ""; print heading; print "- "; next }
+      { print }
+    ' CHANGELOG.md > CHANGELOG.md.tmp || { echo "Error: Failed to update CHANGELOG.md"; rm -f CHANGELOG.md.tmp; exit 1; }
+    mv CHANGELOG.md.tmp CHANGELOG.md
+
+    echo ""
+    echo "CHANGELOG.md has been updated with a template entry."
+  fi
+
+  echo "Opening CHANGELOG.md for review..."
   echo ""
 
   # Open CHANGELOG.md in default editor
