@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.8.1 - 2026-08-12
 - Default folder and custom name prefix now support variables: `%HOSTNAME%`, `%DOMAIN%`, `%DATE%`, `%YEAR%`, `%MONTH%`, `%DAY%`. For example, a folder of `videos/%DOMAIN%` files a YouTube download under `videos/youtube.com`, so downloads can be categorized by site automatically ([#26](https://github.com/nanocortex/metube-firefox-addon/issues/26)).
 - Variables are resolved against the URL actually being sent, so right-clicking a link uses that link's host rather than the host of the page you're on.
 - Unrecognized `%TOKENS%` are left as-is, so existing folder and prefix values are unaffected.
