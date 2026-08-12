@@ -74,11 +74,6 @@ function hideLoadingState() {
 }
 
 browser.runtime.onMessage.addListener(async (message) => {
-  if (message.command === "showLoading") {
-    showLoadingState();
-    return;
-  }
-
   hideLoadingState();
 
   if (message.command === "errorOccurred") {
@@ -122,7 +117,7 @@ function getPopupSelects() {
 }
 
 addEventListener('DOMContentLoaded', async (event) => {
-  let url = await getCurrentUrl();
+  let url = new URLSearchParams(location.search).get('url') || await getCurrentUrl();
   if (url && url.indexOf("://") === -1) url = "";
   document.getElementById('urlInput').value = url || "";
 

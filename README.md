@@ -43,6 +43,8 @@ See the [CHANGELOG](CHANGELOG.md) for version history and release notes.
    - Right-click on a video link and select "Send to MeTube"
    - Right-click on the page itself and select "Send page to MeTube"
 
+All four methods behave the same way, controlled by **One-Click Mode**. When it is disabled (the default), the popup opens pre-filled with the target URL so you can adjust quality, folder or any other option before sending. When it is enabled, the download is queued immediately without opening the popup.
+
 ### Keyboard Shortcuts
 
 The extension supports the following keyboard shortcut:
@@ -114,7 +116,7 @@ The **Default Folder** and **Custom Name Prefix** settings accept variables that
 | **Show Context Menu on Links** | Show "Send to MeTube" when right-clicking links | `true` |
 | **Show Context Menu on Page** | Show "Send page to MeTube" when right-clicking the page | `true` |
 | **Auto Start** | Automatically start downloads when ready | `true` |
-| **One-Click Mode** | Send current page to MeTube with one click | `false` |
+| **One-Click Mode** | Queue downloads immediately instead of opening the popup. Applies to the toolbar icon, the keyboard shortcut and both context menu entries | `false` |
 | **Strict Playlist Mode** | Only download playlists when URL explicitly points to one (prevents downloading YouTube Mixes when you only want the current video) | `false` |
 | **Send Custom Headers** | Enable inclusion of custom headers when queueing | `false` |
 | **Custom Headers** | Specify custom header names and values for authentication or other purposes | `[]` (empty) |

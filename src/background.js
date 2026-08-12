@@ -247,30 +247,35 @@ async function sendToMeTube(itemUrl, options) {
   }
 }
 
-function triggerSendWithLoading(url) {
-  setTimeout(async () => {
-    try {
-      await browser.runtime.sendMessage({ command: 'showLoading' });
-    } catch (error) {
-      console.error("Failed to send showLoading message:", error);
-    }
+async function openPopupWithUrl(url) {
+  browser.browserAction.setPopup({
+    popup: `popup/popup.html?url=${encodeURIComponent(url)}`
+  });
 
-    const options = await getDefaultSendOptions();
-    await sendToMeTube(url, options);
-  }, 100);
+  try {
+    await browser.browserAction.openPopup();
+  } catch (error) {
+    console.error("Failed to open popup:", error);
+  } finally {
+    // Only affects later openings; the popup opened above keeps its url.
+    browser.browserAction.setPopup({ popup: "popup/popup.html" });
+  }
 }
 
-async function sendWithLoadingIndicator(url) {
-  browser.browserAction.setPopup({ popup: "popup/popup.html" });
-  browser.browserAction.openPopup();
-  triggerSendWithLoading(url);
+async function startSendFlow(url) {
+  if (await getOneClickMode()) {
+    await sendToMeTube(url, await getDefaultSendOptions());
+    return;
+  }
+
+  await openPopupWithUrl(url);
 }
 
 browser.menus.onClicked.addListener(async function(info, tab) {
   if (info.menuItemId === "send-to-metube" && info.linkUrl) {
-    await sendWithLoadingIndicator(info.linkUrl);
+    await startSendFlow(info.linkUrl);
   } else if (info.menuItemId === "send-to-metube-page") {
-    await sendWithLoadingIndicator(tab.url);
+    await startSendFlow(tab.url);
   }
 });
 
@@ -301,11 +306,7 @@ updateBrowserActionPopup();
 
 browser.commands.onCommand.addListener(async (command) => {
   if (command === "send-to-metube") {
-    browser.browserAction.setPopup({ popup: "popup/popup.html" });
-    browser.browserAction.openPopup();
-
-    const url = await getCurrentUrl();
-    triggerSendWithLoading(url);
+    await startSendFlow(await getCurrentUrl());
   }
 });
 

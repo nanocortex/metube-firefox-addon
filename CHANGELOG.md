@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+- The context menu and keyboard shortcut no longer send the download before you can react. With One-Click Mode disabled they now open the popup pre-filled with the target URL, so quality, folder and other options can be adjusted first ([#18](https://github.com/nanocortex/metube-firefox-addon/issues/18)).
+- With One-Click Mode enabled, all four entry points queue the download immediately without opening the popup.
+- Right-clicking a link now carries that link's URL into the popup instead of the URL of the page you are on.
+
 ## 1.8.1 - 2026-08-12
 - Default folder and custom name prefix now support variables: `%HOSTNAME%`, `%DOMAIN%`, `%DATE%`, `%YEAR%`, `%MONTH%`, `%DAY%`. For example, a folder of `videos/%DOMAIN%` files a YouTube download under `videos/youtube.com`, so downloads can be categorized by site automatically ([#26](https://github.com/nanocortex/metube-firefox-addon/issues/26)).
 - Variables are resolved against the URL actually being sent, so right-clicking a link uses that link's host rather than the host of the page you're on.
