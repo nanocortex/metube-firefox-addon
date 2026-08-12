@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.8.2 - 2026-08-12
 - The context menu and keyboard shortcut no longer send the download before you can react. With One-Click Mode disabled they now open the popup pre-filled with the target URL, so quality, folder and other options can be adjusted first ([#18](https://github.com/nanocortex/metube-firefox-addon/issues/18)).
 - With One-Click Mode enabled, all four entry points queue the download immediately without opening the popup.
 - Right-clicking a link now carries that link's URL into the popup instead of the URL of the page you are on.
