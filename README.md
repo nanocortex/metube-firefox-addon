@@ -33,6 +33,8 @@ See the [CHANGELOG](CHANGELOG.md) for version history and release notes.
 
 > **Note**: This extension requires a running [MeTube](https://github.com/alexta69/metube) instance. MeTube is a self-hosted YouTube downloader with a web interface. If you don't have MeTube set up yet, visit the [MeTube project](https://github.com/alexta69/metube) for installation instructions.
 
+> **Important**: MeTube refuses requests from browser extensions unless `CORS_ALLOWED_ORIGINS` is set on your instance (enforced since MeTube 2026.09.25). Set `CORS_ALLOWED_ORIGINS=*` and restart MeTube, see [CORS Configuration](#cors-configuration) and the [MeTube wiki](https://github.com/alexta69/metube/wiki/Sending-links-to-MeTube).
+
 ### Basic Usage
 
 1. Configure your MeTube instance URL in addon preferences (`about:addons` → MeTube Downloader → Options)
@@ -141,6 +143,12 @@ This extension requires the following permissions:
 **Error: "MeTube instance url not configured"**
 - Go to `about:addons` → MeTube Downloader → Options and enter your MeTube URL
 
+**Nothing happens, or "MeTube refused this request from moz-extension://..." (HTTP 403)**
+- Your MeTube instance does not allow requests from the extension. Since MeTube 2026.09.25 this applies to both HTTP and HTTPS instances.
+- Set `CORS_ALLOWED_ORIGINS=*` on your MeTube instance and restart it, see [CORS Configuration](#cors-configuration)
+- The MeTube container logs show `Refused cross-origin POST /add from moz-extension://...` when this is the cause
+- With One-Click Mode enabled the popup does not open, so the error is only visible in the extension console (see [Debugging and Viewing Logs](#debugging-and-viewing-logs))
+
 **Error: "Connection failed" with HTTP URLs (e.g., `http://server:5510`)**
 - Firefox HTTPS-Only Mode blocks HTTP requests from extensions ([Firefox bug #1685862](https://bugzilla.mozilla.org/show_bug.cgi?id=1685862))
 - **Important**: Site exceptions do NOT work for extension requests - this is a known Firefox limitation
@@ -152,7 +160,7 @@ This extension requires the following permissions:
 **Error: "Connection failed" or CORS errors with HTTPS URLs**
 - **Missing host permission**: Re-save your settings in addon preferences (`about:addons`) and accept the permission prompt when Firefox asks. This is the most common fix.
 - **Self-signed certificate**: Visit your MeTube URL in a browser tab first and accept the security warning/certificate
-- **CORS not configured**: If re-saving settings doesn't help, set `CORS_ALLOWED_ORIGINS=*` on your MeTube instance — see [CORS Configuration](#cors-configuration) below.
+- **CORS not configured**: Set `CORS_ALLOWED_ORIGINS=*` on your MeTube instance, see [CORS Configuration](#cors-configuration) below.
 - **SSO/Authentication**: Enable "Send cookies for authentication (SSO)" in extension settings (see [Enabling SSO Support](#enabling-sso-support))
 
 **Error: "Authentication failed. Your MeTube instance is redirecting to authentication"**
@@ -162,9 +170,9 @@ This extension requires the following permissions:
 
 ### CORS Configuration
 
-In most cases, re-saving your addon settings and accepting the permission prompt is enough — Firefox grants the extension direct access to your MeTube instance, bypassing CORS entirely.
+**This step is required.** The extension sends requests from its own `moz-extension://` origin, and MeTube refuses cross-origin requests unless their origin is allowed in `CORS_ALLOWED_ORIGINS`. Since MeTube 2026.09.25 this is enforced on the server for every request that queues a download, so granting the extension host permission in Firefox is no longer enough. When the variable is unset or empty, the extension cannot send anything.
 
-If you still get CORS errors after that, you can configure MeTube itself to allow cross-origin requests. Since [MeTube v2025.4.9](https://github.com/alexta69/metube/commit/0072d34), cross-origin requests are denied by default. Set `CORS_ALLOWED_ORIGINS=*` on your MeTube instance (browser extensions use unpredictable `moz-extension://` origins, so `*` is the only viable value).
+Set `CORS_ALLOWED_ORIGINS=*` on your MeTube instance and restart it. See also the [MeTube wiki](https://github.com/alexta69/metube/wiki/Sending-links-to-MeTube).
 
 **Docker Compose:**
 ```yaml
@@ -179,6 +187,8 @@ services:
 ```bash
 docker run -e CORS_ALLOWED_ORIGINS=* ghcr.io/alexta69/metube
 ```
+
+**Allowing only this extension:** instead of `*` you can list the extension's exact origin, e.g. `CORS_ALLOWED_ORIGINS=moz-extension://<uuid>`. The UUID is different for every Firefox profile; MeTube logs it on every refused request (`Refused cross-origin POST /add from moz-extension://...`), or find it in `about:debugging` → This Firefox → MeTube Downloader → Internal UUID. Naming the origin explicitly is also what MeTube requires for credentialed requests, so prefer it if your instance sits behind SSO or reverse proxy authentication.
 
 ### Debugging and Viewing Logs
 
